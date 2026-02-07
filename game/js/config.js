@@ -54,3 +54,5 @@ const CONFIG = {
   SOUND_ENABLED: true,
   SOUND_VOLUME: 0.6,
 };
+
+// No external images or SVGs: collectibles are rendered with canvas drawing

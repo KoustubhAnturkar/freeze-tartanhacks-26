@@ -13,6 +13,8 @@ class Game {
     this.gameState = new GameState(LEVELS, CONFIG.LEVEL_TRANSITION_DELAY);
     this.player = new Player(50, this.height - 100, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
 
+    // No images allowed — collectibles are rendered via canvas drawing
+
     // Initialize sounds and ensure BGM starts/resumes on user gesture
     if (typeof SOUNDS !== 'undefined' && SOUNDS) {
       SOUNDS.init();
@@ -80,7 +82,15 @@ class Game {
     }
 
     // Check goal collision
-    if (this.gameState.checkGoalCollision(this.player)) {
+    // Check collectible collision (collect before allowing level completion)
+    if (this.gameState.collectAt(this.player)) {
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('collect');
+      }
+    }
+
+    // Only allow level completion when all collectibles are gathered
+    if (this.gameState.checkGoalCollision(this.player) && this.gameState.getCollectibles().length === 0) {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('levelComplete');
       }
@@ -103,6 +113,9 @@ class Game {
 
     // Draw player
     this.player.draw(this.ctx, CONFIG.COLORS);
+
+    // Draw collectibles (canvas-only)
+    this.renderer.drawCollectibles(this.gameState.getCollectibles());
 
     // Draw win message if level complete
     if (this.gameState.isWon()) {

@@ -9,6 +9,7 @@ class GameState {
     this.transitioning = false;
     this.tutorial = !localStorage.getItem('tutDone');
     this.currentLevelData = null;
+    this.currentCollectibles = [];
     
     this.loadLevel(this.currentLevel);
   }
@@ -19,7 +20,8 @@ class GameState {
     this.currentLevelData = this.levels[levelNumber - 1];
     this.won = false;
     this.transitioning = false;
-    
+    // clone collectibles so we can mutate per-play
+    this.currentCollectibles = (this.currentLevelData.collectibles || []).map(c => ({...c}));
     // Update UI
     document.getElementById('lvl').textContent = levelNumber;
   }
@@ -55,6 +57,23 @@ class GameState {
            player.x + player.w > goal.x &&
            player.y < goal.y + goal.h &&
            player.y + player.h > goal.y;
+  }
+
+  // Collectible accessors and collision handling
+  getCollectibles() {
+    return this.currentCollectibles;
+  }
+
+  // Check player against collectibles; remove and return true if any collected
+  collectAt(player) {
+    for (let i = this.currentCollectibles.length - 1; i >= 0; i--) {
+      const c = this.currentCollectibles[i];
+      if (player.x < c.x + c.w && player.x + player.w > c.x && player.y < c.y + c.h && player.y + player.h > c.y) {
+        this.currentCollectibles.splice(i, 1);
+        return true;
+      }
+    }
+    return false;
   }
 
   // Tutorial management
