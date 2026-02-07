@@ -15,34 +15,28 @@ canvas {
   display: block;
   background: #fff;
   width: 100vw;
-  height: calc(100vh - 120px);
+  height: 100vh;
   /* object-fit removed to allow stretching/filling */
 }
 
-#ui {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  color: #000;
-  font-size: 20px;
-  font-weight: bold;
-}
-
+/* Control Styles Reverted to Transparent Overlay */
 #controls {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px;
-  background: #1e293b;
-  /* Slate-800 ribbon background */
+  pointer-events: none;
+
+  /* Remove Ribbon (no background, height, or border) */
+  background: transparent;
+  height: auto;
+  padding: 0 40px 30px 40px;
+  /* Add bottom padding */
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  pointer-events: none;
-  border-top: 4px solid #334155;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+  align-items: flex-end;
+  border: none;
+  box-shadow: none;
 }
 
 #dpad,
@@ -55,29 +49,37 @@ canvas {
 .btn {
   width: 80px;
   height: 80px;
-  background: #0f172a;
-  /* Slate-900 */
-  border: 3px solid #3b82f6;
-  /* Blue-500 */
+
+  /* Transparent Style */
+  background: rgba(0, 0, 0, 0.4);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+
   border-radius: 50%;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  justify-content: center;
   user-select: none;
+  -webkit-user-select: none;
+  /* Safari/Chrome */
+  -webkit-tap-highlight-color: transparent;
+  /* Remove tap highlight on mobile */
+  -webkit-touch-callout: none;
+  /* Disable long-press menu */
   cursor: pointer;
   pointer-events: auto;
-  /* Important: Enable clicks */
-  transition: transform 0.1s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, background 0.2s;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .btn:active {
-  background: #1e40af;
-  border-color: #60a5fa;
+  background: rgba(30, 144, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.6);
   transform: scale(0.95);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #tutorial {

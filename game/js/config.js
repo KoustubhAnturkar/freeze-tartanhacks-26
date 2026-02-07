@@ -35,10 +35,10 @@ const CONFIG = {
     // UI
     winOverlay: "rgba(17, 24, 39, 0.8)",
     winText: "#ffffff",
-    BACKGROUND: "#fff",
+    BACKGROUND: "#ffffff",
     PLATFORM: "#334155",
     PLATFORM_TOP: "#f1f5f9",
-    GOAL: "#fff",
+    GOAL: "#828282ff",
     GOAL_OUTLINE: "#1e90ff",
     GOAL_FLAG: "#1e90ff",
     PENGUIN_BODY: "#000",

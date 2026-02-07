@@ -35,13 +35,32 @@ class Renderer {
     this.ctx.lineTo(w * 0.7, h);
     this.ctx.fill();
 
-    // 3. Draw Simple Clouds
-    this.ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+    // 3. Draw Fluffy Clouds
+    this.drawCloud(w * 0.2, h * 0.15, 1.0);
+    this.drawCloud(w * 0.7, h * 0.1, 1.2);
+    this.drawCloud(w * 0.5, h * 0.25, 0.8);
+  }
+
+  // Helper to draw a fluffy cloud
+  drawCloud(x, y, scale) {
+    this.ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
     this.ctx.beginPath();
-    this.ctx.arc(w * 0.2, h * 0.2, 30, 0, Math.PI * 2);
-    this.ctx.arc(w * 0.25, h * 0.18, 40, 0, Math.PI * 2);
-    this.ctx.arc(w * 0.7, h * 0.1, 50, 0, Math.PI * 2);
-    this.ctx.arc(w * 0.8, h * 0.12, 30, 0, Math.PI * 2);
+    // Center circle
+    this.ctx.moveTo(x + 30 * scale, y);
+    this.ctx.arc(x, y, 30 * scale, 0, Math.PI * 2);
+
+    // Left overlapping circle
+    this.ctx.moveTo((x - 25 * scale) + 25 * scale, y + 10 * scale);
+    this.ctx.arc(x - 25 * scale, y + 10 * scale, 25 * scale, 0, Math.PI * 2);
+
+    // Right overlapping circle
+    this.ctx.moveTo((x + 25 * scale) + 28 * scale, y + 5 * scale);
+    this.ctx.arc(x + 25 * scale, y + 5 * scale, 28 * scale, 0, Math.PI * 2);
+
+    // Top-ish circle to add fluff
+    this.ctx.moveTo((x + 10 * scale) + 25 * scale, y - 15 * scale);
+    this.ctx.arc(x + 10 * scale, y - 15 * scale, 25 * scale, 0, Math.PI * 2);
+
     this.ctx.fill();
   }
 
@@ -58,17 +77,18 @@ class Renderer {
     });
   }
 
-  // Draw the goal as a massive foreground mountain
+  // Draw the goal as a mountain on the platform
   drawGoal(goal, colors) {
-    // Make the visual mountain much larger than the hitbox
-    const visualX = goal.x - 50;
-    const visualW = goal.w + 100;
+    // The mountain base should match the goal width (plus a bit)
+    // The peak should be at the top of the goal (or slightly higher)
+    const visualX = goal.x - 20;
+    const visualW = goal.w + 40;
     const cx = visualX + visualW / 2;
-    const peakY = goal.y - 50; // Taller peak
-    const baseY = goal.y + goal.h;
+    const peakY = goal.y - 40; // Peak above the goal hitbox
+    const baseY = goal.y + goal.h + 50; // Extend base down to overlap with platform
 
     // Mountain Body
-    this.ctx.fillStyle = colors.goal;
+    this.ctx.fillStyle = colors.GOAL;
     this.ctx.beginPath();
     this.ctx.moveTo(visualX, baseY);
     this.ctx.lineTo(cx, peakY);
@@ -79,7 +99,7 @@ class Renderer {
     // Snow Cap
     const capHeight = (baseY - peakY) * 0.3;
     const capY = peakY + capHeight;
-    const capWidth = visualW * 0.3; // Approx width at cap height
+    const capWidth = visualW * 0.3;
 
     this.ctx.fillStyle = colors.goalPeak;
     this.ctx.beginPath();
@@ -89,17 +109,19 @@ class Renderer {
     this.ctx.closePath();
     this.ctx.fill();
 
-    // Flag (at original goal position logic to guide player)
-    const flagX = goal.x + goal.w / 2;
-    const flagY = goal.y; // Original top of goal box
+    // Flag (at the peak of the mountain)
+    const flagX = cx;
+    const flagY = peakY;
 
-    this.ctx.fillStyle = "#4B5563";
+    // Pole
+    this.ctx.fillStyle = '#4B5563';
     this.ctx.fillRect(flagX - 1, flagY - 25, 2, 25);
 
-    this.ctx.fillStyle = colors.goalFlag;
+    // Flag Triangle
+    this.ctx.fillStyle = colors.GOAL_FLAG;
     this.ctx.beginPath();
     this.ctx.moveTo(flagX, flagY - 25);
-    this.ctx.lineTo(flagX + 12, flagY - 18);
+    this.ctx.lineTo(flagX + 15, flagY - 18);
     this.ctx.lineTo(flagX, flagY - 11);
     this.ctx.closePath();
     this.ctx.fill();
