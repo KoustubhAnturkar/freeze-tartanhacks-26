@@ -1,10 +1,9 @@
 // Game configuration constants
 const CONFIG = {
   // Physics
-  GRAVITY: 0.3,
-  JUMP_FORCE: -10,
-  MOVE_SPEED: 2,
-  DECELERATION: -0.01,
+  GRAVITY: 0.5,
+  JUMP_FORCE: -12,
+  MOVE_SPEED: 4,
   
   // Player dimensions
   PLAYER_WIDTH: 28,
@@ -33,5 +32,8 @@ const CONFIG = {
     PENGUIN_FEET: '#1e90ff',
     WIN_OVERLAY: 'rgba(0, 0, 0, 0.8)',
     WIN_TEXT: '#1e90ff'
-  }
+  },
+  // Sound settings
+  SOUND_ENABLED: true,
+  SOUND_VOLUME: 0.6
 };

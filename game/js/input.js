@@ -6,7 +6,8 @@ class InputHandler {
       right: false,
       jump: false
     };
-    
+    this.prevKeys = { left: false, right: false, jump: false };
+
     this.setupEventListeners();
   }
 
@@ -50,6 +51,7 @@ class InputHandler {
     // Touch events (mobile)
     button.addEventListener('touchstart', () => {
       this.keys[keyName] = true;
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') SOUNDS.play('button');
     });
     
     button.addEventListener('touchend', () => {
@@ -59,11 +61,31 @@ class InputHandler {
     // Mouse events (desktop testing)
     button.addEventListener('mousedown', () => {
       this.keys[keyName] = true;
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') SOUNDS.play('button');
     });
     
     button.addEventListener('mouseup', () => {
       this.keys[keyName] = false;
     });
+  }
+
+  // Call frequently to update previous key state and play step sounds
+  poll() {
+    if (typeof SOUNDS === 'undefined' || !SOUNDS || !SOUNDS.play) {
+      this.prevKeys.left = this.keys.left;
+      this.prevKeys.right = this.keys.right;
+      this.prevKeys.jump = this.keys.jump;
+      return;
+    }
+
+    // Play step when movement begins
+    if ((this.keys.left || this.keys.right) && !(this.prevKeys.left || this.prevKeys.right)) {
+      SOUNDS.play('step');
+    }
+
+    this.prevKeys.left = this.keys.left;
+    this.prevKeys.right = this.keys.right;
+    this.prevKeys.jump = this.keys.jump;
   }
 
   // Get current key states
