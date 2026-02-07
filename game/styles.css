@@ -233,11 +233,12 @@ canvas {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.95);
   color: #fff;
-  z-index: 9999;
+  z-index: 99999;
   text-align: center;
   padding: 24px;
+  pointer-events: auto;
 }
 
 #rotateOverlay .rotateCard {
@@ -246,4 +247,7 @@ canvas {
   border-radius: 10px;
   padding: 16px 18px;
   font-family: Arial, sans-serif;
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }

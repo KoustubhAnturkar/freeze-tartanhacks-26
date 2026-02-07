@@ -53,6 +53,16 @@ class Game {
       const vh = window.innerHeight;
       this.isLandscape = vw >= vh;
 
+      // Show/hide rotate overlay based on orientation
+      const rotateOverlay = document.getElementById('rotateOverlay');
+      if (rotateOverlay) {
+        if (this.isLandscape) {
+          rotateOverlay.style.display = 'none';
+        } else {
+          rotateOverlay.style.display = 'flex';
+        }
+      }
+
       // Approx height of your control strip:
       // buttons are 80px tall and #controls has 30px bottom padding [file:2]
       const controlsH = this.isLandscape ? 80 + 30 + 10 : 0; // +10 buffer
