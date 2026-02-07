@@ -42,8 +42,14 @@ class GameState {
     
     setTimeout(() => {
       if (this.currentLevel < this.levels.length) {
+        const completedLevel = this.currentLevel;
         this.nextLevel();
         if (onComplete) onComplete();
+
+        // Trigger cutscene after levels 2, 4, 6, etc. if Game instance exists
+        if (completedLevel % 2 === 0 && window.game && window.game.showCutsceneIfNeeded) {
+          window.game.showCutsceneIfNeeded(completedLevel);
+        }
       } else {
         this.transitioning = false;
       }
