@@ -4,6 +4,7 @@ const CONFIG = {
   GRAVITY: 0.5,
   JUMP_FORCE: -12,
   MOVE_SPEED: 4,
+  DECELERATION: -0.1,
 
   // Player dimensions
   PLAYER_WIDTH: 28,

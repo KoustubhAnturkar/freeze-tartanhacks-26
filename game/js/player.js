@@ -19,7 +19,15 @@ class Player {
     } else if (keys.right) {
       this.vx = speed;
     } else {
-      this.vx = 0;
+      if(!this.onGround) {
+        if(this.vx > 0) {
+          this.vx = Math.max(0, this.vx + deceleration); // slow down in air
+        } else {
+          this.vx = Math.min(0, this.vx - deceleration); // slow down in air
+        }
+      } else {
+        this.vx = 0; // stop immediately on ground
+      }
     }
 
     // Apply gravity
