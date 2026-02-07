@@ -2,7 +2,7 @@
 # DO NOT CHANGE THIS SCRIPT!!!!! THIS IS USED FOR JUDGING.
 set -euo pipefail
 
-ARCHIVE="$1"
+ARCHIVE="${1:-compressed/game_compressed.tar.gz}"
 OUT_DIR="extracted"
 
 rm -rf "$OUT_DIR"
