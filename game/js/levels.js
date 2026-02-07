@@ -38,7 +38,7 @@ const LEVELS = {
       ],
     },
 
-    // Level 3 - Icicle Danger Zone
+        // Level 3 - Icicle Danger Zone
     {
       platforms: [
         { x: 0, y: 200, w: 150, h: 50 },
@@ -52,15 +52,6 @@ const LEVELS = {
       collectibles: [
         { x: 230, y: 310, w: 20, h: 20 },
         { x: 550, y: 360, w: 20, h: 20 },
-      ],
-      icicles: [
-        // Icicles hanging from ceiling - avoid these!
-        { x: 180, y: 0, w: 20, h: 60 }, // Above first gap
-        { x: 340, y: 0, w: 25, h: 80 }, // Above second platform
-        { x: 490, y: 0, w: 20, h: 70 }, // Between platforms
-        { x: 600, y: 0, w: 30, h: 90 }, // Before final platform
-        { x: 250, y: 0, w: 18, h: 50 }, // Extra danger
-        { x: 420, y: 0, w: 22, h: 65 }, // Extra danger
       ],
       polarBears: [
         // Polar bears that patrol horizontally - avoid these!
