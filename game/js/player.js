@@ -11,7 +11,7 @@ class Player {
   }
 
   // Update player physics and handle collisions
-  update(keys, platforms, gravity, speed, jumpForce, deceleration) {
+  update(keys, walls, platforms, gravity, speed, jumpForce, deceleration) {
     // Horizontal movement
     if (keys.left) {
       this.vx = -speed;
@@ -62,6 +62,27 @@ class Player {
         else if (this.vx < 0) {
           this.x = platform.x + platform.w;
           this.vx = 0;
+        }
+      }
+    });
+
+    // Wall collision detection
+    walls.forEach(wall => {
+      if (this.checkCollision(wall)) {
+        // Hitting wall from right
+        if (this.vx > 0) {
+          this.x = wall.x - this.w;
+          this.vx = 0;
+        }
+        // Hitting wall from left
+        else if (this.vx < 0) {
+          this.x = wall.x + wall.w;
+          this.vx = 0;
+        }
+        // Hitting wall from below
+        else if (this.vy < 0) {
+          this.y = wall.y + wall.h;
+          this.vy = 0;
         }
       }
     });
