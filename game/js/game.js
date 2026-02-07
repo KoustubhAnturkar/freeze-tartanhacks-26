@@ -12,6 +12,21 @@ class Game {
     this.input = new InputHandler();
     this.gameState = new GameState(LEVELS, CONFIG.LEVEL_TRANSITION_DELAY);
     this.player = new Player(50, 20, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
+    this.score = 0;
+    this.lastLevel = this.gameState.getCurrentLevel();
+
+    // Setup small score icon renderer (scotty dog) if the DOM canvas exists
+    const scoreIconEl = document.getElementById('scoreIcon');
+    if (scoreIconEl && scoreIconEl.getContext) {
+      try {
+        const iconCtx = scoreIconEl.getContext('2d');
+        this.scoreIconCanvas = scoreIconEl;
+        this.scoreIconRenderer = new Renderer(iconCtx, scoreIconEl.width, scoreIconEl.height);
+      } catch (e) {
+        this.scoreIconCanvas = null;
+        this.scoreIconRenderer = null;
+      }
+    }
 
     // Initialize cutscene manager
     this.cutsceneManager = new CutsceneManager();
@@ -47,6 +62,10 @@ class Game {
 
     // Setup tutorial
     this.setupTutorial();
+
+    // Initialize score UI
+    const scoreEl = document.getElementById('score');
+    if (scoreEl) scoreEl.textContent = String(this.score);
 
     // Start game loop
     this.gameLoop();
@@ -89,6 +108,15 @@ class Game {
 
   // Update game state
   update() {
+    // Reset score when a new level is loaded
+    const currentLevel = this.gameState.getCurrentLevel();
+    if (this.lastLevel !== currentLevel) {
+      this.lastLevel = currentLevel;
+      this.score = 0;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
+    }
+    // Don't update during tutorial or transitions
     // Don't update during tutorial, transitions, or cutscenes
     if (!this.isLandscape) return;
 
@@ -123,6 +151,12 @@ class Game {
       }
       // RESET COLLECTIBLES: Reload the level to respawn items
       this.gameState.loadLevel(this.gameState.getCurrentLevel());
+
+      // Reset the score when player falls
+      this.score = 0;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
+
       this.player.reset(50, 20);
     }
 
@@ -131,6 +165,12 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall'); // Use fall sound for icicle hit
       }
+      // RESET COLLECTIBLES: Reload the level to respawn items
+      this.gameState.loadLevel(this.gameState.getCurrentLevel());
+      // Reset the score when player hits an icicle
+      this.score = 0;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
       this.player.reset(50, 20);
     }
 
@@ -139,6 +179,13 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall'); // Use fall sound for polar bear hit
       }
+      // RESET COLLECTIBLES: Reload the level to respawn items
+        this.gameState.loadLevel(this.gameState.getCurrentLevel());
+        // Reset the score when player hits a polar bear
+        this.score = 0;
+        const scoreEl = document.getElementById('score');
+        if (scoreEl) scoreEl.textContent = String(this.score);
+
       this.player.reset(50, 20);
     }
 
@@ -148,6 +195,10 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('collect');
       }
+      // Increment score and update UI
+      this.score += 1;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
     }
 
     // Only allow level completion when all collectibles are gathered
@@ -156,6 +207,10 @@ class Game {
         SOUNDS.play('levelComplete');
       }
       this.gameState.markLevelComplete(() => {
+        // Reset the score
+        this.score = 0;
+        const scoreEl = document.getElementById('score');
+        if (scoreEl) scoreEl.textContent = String(this.score);
         this.player.reset(50, 20);
       });
     }
@@ -193,6 +248,17 @@ class Game {
         this.gameState.getTotalLevels(),
         CONFIG.COLORS
       );
+    }
+
+    // Render the small scotty-dog icon into the score canvas (keeps it animated)
+    if (this.scoreIconRenderer && this.scoreIconCanvas) {
+      try {
+        const ic = this.scoreIconCanvas;
+        const icCtx = ic.getContext('2d');
+        icCtx.clearRect(0, 0, ic.width, ic.height);
+        // Draw stationary scotty icon centered in the small canvas
+        this.scoreIconRenderer.drawScottyIcon(0, 0, ic.width, ic.height);
+      } catch (e) {}
     }
   }
 

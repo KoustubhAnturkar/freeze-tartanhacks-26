@@ -206,8 +206,60 @@ class Renderer {
     });
   }
 
+  // Draw a single stationary scotty dog icon (no bobbing)
+  drawScottyIcon(x, y, w, h) {
+    const ctx = this.ctx;
+    // Use a slightly smaller scale so the top doesn't get clipped
+    const s = w / 36;
+    ctx.save();
+    // Center the drawing in the provided rect
+    ctx.translate(x + w / 2, y + h / 2);
+    ctx.scale(s, s);
+
+    // --- 1. THE BODY (From First Version) ---
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+
+    // Main body block
+    ctx.rect(-12, -5, 20, 14);
+
+    // Back leg
+    ctx.rect(-12, 9, 6, 6);
+
+    // Front leg
+    ctx.rect(2, 9, 6, 6);
+
+    // Tail (Pointy)
+    ctx.moveTo(-12, -5);
+    ctx.lineTo(-14, -12);
+    ctx.lineTo(-8, -5);
+    ctx.fill();
+
+    // --- 2. THE HEAD (From First Version) ---
+    ctx.beginPath();
+
+    // Neck/Head area
+    ctx.rect(0, -15, 14, 12);
+
+    // Snout/Beard
+    ctx.moveTo(14, -10);
+    ctx.lineTo(18, -10); // Nose tip
+    ctx.lineTo(14, 0);   // Chin
+
+    // Ears (Pointy)
+    ctx.moveTo(2, -15);
+    ctx.lineTo(4, -22);  // Ear tip
+    ctx.lineTo(8, -15);
+    ctx.fill();
+
+    // --- 3. THE COLLAR (From Second Version - Fixed Placement) ---
+    ctx.fillStyle = "#DC2626"; // Bright Red
+    ctx.fillRect(-3, -4, 14, 4);
+
+    ctx.restore();
+  }
   // Draw icicles as hanging spikes
-  drawIcicles(icicles) {
+  drawIcicles(icicles){
     icicles.forEach((icicle) => {
       const ctx = this.ctx;
       const x = icicle.x;
