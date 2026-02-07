@@ -75,6 +75,8 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall');
       }
+      // RESET COLLECTIBLES: Reload the level to respawn items
+      this.gameState.loadLevel(this.gameState.getCurrentLevel());
       this.player.reset(50, 20);
     }
 
