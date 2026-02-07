@@ -3,7 +3,7 @@
 const LEVELS = {
   platformsAndGoals: [
     // Testing level - simple platform and goal
-    Level 1 - Introduction
+    //Level 1 - Introduction
     {
       platforms: [
         { x: 0, y: 200, w: 200, h: 50 },
