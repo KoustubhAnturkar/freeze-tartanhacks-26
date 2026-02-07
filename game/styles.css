@@ -15,7 +15,8 @@ canvas {
   display: block;
   background: #fff;
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
+  /* safe viewport height on mobile */
   /* object-fit removed to allow stretching/filling */
 }
 
@@ -123,4 +124,25 @@ canvas {
 
 #skipBtn:active {
   background: #4169e1;
+}
+
+#rotateOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  z-index: 9999;
+  text-align: center;
+  padding: 24px;
+}
+
+#rotateOverlay .rotateCard {
+  max-width: 320px;
+  border: 2px solid #1e90ff;
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-family: Arial, sans-serif;
 }
