@@ -4,13 +4,12 @@
 # Recursively scans and minifies files in the game folder
 # Creates a compressed archive that preserves folder structure
 
-set -e  # Exit on error
-
 # Configuration
 SOURCE_DIR="game"
-TEMP_DIR="game_minified_temp"
+TEMP_DIR="/tmp/game_minified_temp_$$"  # Use /tmp with PID for uniqueness
 OUTPUT_DIR="compressed"
 ARCHIVE_NAME="game_compressed.tar.gz"
+SCRIPT_DIR="$(pwd)"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -27,14 +26,11 @@ if [ ! -d "$SOURCE_DIR" ]; then
     exit 1
 fi
 
-# Clean up any previous temporary directory
-if [ -d "$TEMP_DIR" ]; then
-    echo -e "${YELLOW}Cleaning up previous temporary directory...${NC}"
-    rm -rf "$TEMP_DIR"
-fi
+# Clean up any previous temporary directory (in case of previous failure)
+rm -rf "$TEMP_DIR" 2>/dev/null || true
 
-# Create temporary directory
-echo -e "${GREEN}Creating temporary directory...${NC}"
+# Create temporary directory in /tmp
+echo -e "${GREEN}Creating temporary directory: $TEMP_DIR${NC}"
 mkdir -p "$TEMP_DIR"
 
 # Create output directory if it doesn't exist
@@ -49,9 +45,13 @@ minify_html() {
     sed -e 's/<!--.*-->//g' "$input_file" | \
     tr '\n' ' ' | \
     sed -e 's/  */ /g' \
-        -e 's/> </></g' \
+        -e 's/> */>/g' \
+        -e 's/ *</</g' \
         -e 's/^[[:space:]]*//' \
-        -e 's/[[:space:]]*$//' > "$output_file"
+        -e 's/[[:space:]]*$//' > "$output_file" || {
+        echo "Warning: HTML minification had issues, copying original"
+        cp "$input_file" "$output_file"
+    }
 }
 
 # Function to minify CSS
@@ -69,7 +69,10 @@ minify_css() {
         -e 's/ *; */;/g' \
         -e 's/ *, */,/g' \
         -e 's/^[[:space:]]*//' \
-        -e 's/[[:space:]]*$//' > "$output_file"
+        -e 's/[[:space:]]*$//' > "$output_file" || {
+        echo "Warning: CSS minification had issues, copying original"
+        cp "$input_file" "$output_file"
+    }
 }
 
 # Function to minify JavaScript
@@ -93,7 +96,10 @@ minify_js() {
         -e 's/ *\* */\*/g' \
         -e 's|/ */|/|g' \
         -e 's/^[[:space:]]*//' \
-        -e 's/[[:space:]]*$//' > "$output_file"
+        -e 's/[[:space:]]*$//' > "$output_file" || {
+        echo "Warning: JS minification had issues, copying original"
+        cp "$input_file" "$output_file"
+    }
 }
 
 # Function to minify JSON
@@ -111,7 +117,10 @@ minify_json() {
         -e 's/ *: */:/g' \
         -e 's/ *, */,/g' \
         -e 's/^[[:space:]]*//' \
-        -e 's/[[:space:]]*$//' > "$output_file"
+        -e 's/[[:space:]]*$//' > "$output_file" || {
+        echo "Warning: JSON minification had issues, copying original"
+        cp "$input_file" "$output_file"
+    }
 }
 
 # Function to copy and optionally minify files
@@ -171,10 +180,11 @@ temp_size=$(du -sh "$TEMP_DIR" | cut -f1)
 echo -e "${BLUE}Creating compressed archive...${NC}"
 
 # Create tarball from temporary directory
-# We want to preserve the 'game' folder name in the archive
-cd "$TEMP_DIR"
-tar -czf "../$OUTPUT_DIR/$ARCHIVE_NAME" .
-cd ..
+# Change to temp dir, create archive, then return to script dir
+(cd "$TEMP_DIR" && tar -czf "$SCRIPT_DIR/$OUTPUT_DIR/$ARCHIVE_NAME" .) || {
+    echo -e "${YELLOW}Error: Failed to create archive${NC}"
+    exit 1
+}
 
 # Calculate compressed size
 compressed_size=$(du -sh "$OUTPUT_DIR/$ARCHIVE_NAME" | cut -f1)
