@@ -1,1 +1,0 @@
-function test(){console.log("Hello");return true;}function demo(){alert("Test");}
