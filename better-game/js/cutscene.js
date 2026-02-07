@@ -13,13 +13,12 @@ class CutsceneManager {
     // Story cutscenes - shown at start and after every 2 levels
     this.cutscenes = {
       0: { // Before level 1 (intro)
-        title: "The Frozen Journey Begins",
+        title: "The Unwavering Penguin",
         texts: [
           "A penguin looks toward distant mountains...",
           "No one knows why.",
           "The penguin does not explain!"
         ],
-        objective: "Master the basics: Jump and reach the goal!",
         background: '#1a1a2e'
       }
     };
