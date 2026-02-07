@@ -17,6 +17,14 @@ canvas {
   width: 100vw;
   height: 100vh;
   /* object-fit removed to allow stretching/filling */
+  /* Make canvas unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 /* Control Styles Reverted to Transparent Overlay */
