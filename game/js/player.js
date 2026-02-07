@@ -19,8 +19,8 @@ class Player {
     } else if (keys.right) {
       this.vx = speed;
     } else {
-      if(!this.onGround) {
-        if(this.vx > 0) {
+      if (!this.onGround) {
+        if (this.vx > 0) {
           this.vx = Math.max(0, this.vx + deceleration); // slow down in air
         } else {
           this.vx = Math.min(0, this.vx - deceleration); // slow down in air
@@ -51,8 +51,16 @@ class Player {
         }
         // Hitting platform from below
         else if (this.vy < 0 && this.y - this.vy >= platform.y + platform.h) {
-          this.y = platform.y + platform.h;
-          this.vy = 0;
+          const icicleHeight = 12; // Match the height from drawPlatformIcicles
+          const icicleBottom = platform.y + platform.h + icicleHeight;
+
+          // Check if player's head is touching the icicle area
+          if (this.y < icicleBottom) {
+            return "died"; // Player touched icicles - reset!
+          } else {
+            this.y = platform.y + platform.h;
+            this.vy = 0;
+          }
         }
         // Hitting platform from right
         else if (this.vx > 0) {
@@ -68,7 +76,7 @@ class Player {
     });
 
     // Wall collision detection
-    walls.forEach(wall => {
+    walls.forEach((wall) => {
       if (this.checkCollision(wall)) {
         // Hitting wall from right
         if (this.vx > 0) {
@@ -128,7 +136,6 @@ class Player {
     this.y = y;
     this.vx = 0;
     this.vy = 0;
-
   }
 
   // Draw the penguin

@@ -1,4 +1,4 @@
-// Enhanced WebAudio-based SoundManager with improved SFX and continuous BGM
+// Enhanced WebAudio-based SoundManager with improved SFX and MODERN BGM
 class SoundManager {
   constructor() {
     this.enabled = typeof CONFIG !== 'undefined' ? !!CONFIG.SOUND_ENABLED : true;
@@ -153,7 +153,7 @@ class SoundManager {
     }
   }
 
-  // Continuous looping background music
+  // MODERN BACKGROUND MUSIC - Electronic/Synth Style
   startBGM() {
     if (!this.enabled) return;
     if (!this.ctx) this.init();
@@ -162,104 +162,212 @@ class SoundManager {
     
     const ctx = this.ctx;
     this.bgmGain = ctx.createGain();
-    this.bgmGain.gain.value = 0.16 * this.volume; // Louder and more prominent
+    this.bgmGain.gain.value = 0.20 * this.volume; // Modern, fuller mix
     this.bgmGain.connect(this.masterGain);
 
-    // Musical progression - creates a pleasant ambient loop
-    // Using pentatonic scale (A minor pentatonic: A, C, D, E, G)
-    const baseNotes = [
-      220.00, 261.63, 293.66, 329.63, 392.00, // A3, C4, D4, E4, G4
-      440.00, 523.25, 587.33, 659.25, 783.99  // A4, C5, D5, E5, G5
-    ];
-    
-    // Melodic pattern that loops nicely
-    const melody = [
-      { note: 7, dur: 0.5 },  // D5
-      { note: 5, dur: 0.5 },  // A4
-      { note: 8, dur: 0.5 },  // E5
-      { note: 6, dur: 0.5 },  // C5
-      { note: 7, dur: 0.5 },  // D5
-      { note: 4, dur: 0.5 },  // G4
-      { note: 5, dur: 1.0 },  // A4
-      { note: 3, dur: 0.5 },  // E4
-      
-      { note: 7, dur: 0.5 },  // D5
-      { note: 5, dur: 0.5 },  // A4
-      { note: 8, dur: 0.5 },  // E5
-      { note: 6, dur: 0.5 },  // C5
-      { note: 5, dur: 1.0 },  // A4
-      { note: 2, dur: 0.5 },  // D4
-      { note: 3, dur: 1.0 },  // E4
-    ];
+    // SYNTH PAD - lush, modern atmosphere with detuned sawtooth waves
+    const padFilter = ctx.createBiquadFilter();
+    padFilter.type = 'lowpass';
+    padFilter.frequency.value = 1200;
+    padFilter.Q.value = 1.2;
+    padFilter.connect(this.bgmGain);
 
-    // Bass notes (plays less frequently for depth)
-    const bassPattern = [0, -1, 0, -1, 2, -1, 0, -1]; // -1 = rest
-    let bassStep = 0;
-
-    const secondsPerBeat = 60.0 / this.tempo;
-    this.nextNoteTime = ctx.currentTime;
-
-    const scheduleNote = () => {
-      const beatLength = secondsPerBeat * melody[this.currentNote].dur;
-      
-      // Schedule melody note
-      const freq = baseNotes[melody[this.currentNote].note];
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.type = 'sine';
-      o.frequency.setValueAtTime(freq, this.nextNoteTime);
-      
-      // Envelope for smooth sound
-      g.gain.setValueAtTime(0.0001, this.nextNoteTime);
-      g.gain.linearRampToValueAtTime(0.25, this.nextNoteTime + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, this.nextNoteTime + beatLength * 0.9);
-      
-      o.connect(g);
-      g.connect(this.bgmGain);
-      o.start(this.nextNoteTime);
-      o.stop(this.nextNoteTime + beatLength);
-
-      // Add subtle harmony (octave below)
-      const o2 = ctx.createOscillator();
-      const g2 = ctx.createGain();
-      o2.type = 'triangle';
-      o2.frequency.setValueAtTime(freq / 2, this.nextNoteTime);
-      g2.gain.setValueAtTime(0.0001, this.nextNoteTime);
-      g2.gain.linearRampToValueAtTime(0.12, this.nextNoteTime + 0.02);
-      g2.gain.exponentialRampToValueAtTime(0.0001, this.nextNoteTime + beatLength * 0.9);
-      o2.connect(g2);
-      g2.connect(this.bgmGain);
-      o2.start(this.nextNoteTime);
-      o2.stop(this.nextNoteTime + beatLength);
-
-      // Bass note (every other beat)
-      if (bassPattern[bassStep] !== -1) {
-        const bassFreq = baseNotes[bassPattern[bassStep]];
-        const ob = ctx.createOscillator();
-        const gb = ctx.createGain();
-        ob.type = 'sawtooth';
-        ob.frequency.setValueAtTime(bassFreq / 2, this.nextNoteTime);
-        gb.gain.setValueAtTime(0.0001, this.nextNoteTime);
-        gb.gain.linearRampToValueAtTime(0.14, this.nextNoteTime + 0.01);
-        gb.gain.exponentialRampToValueAtTime(0.0001, this.nextNoteTime + beatLength * 0.8);
-        ob.connect(gb);
-        gb.connect(this.bgmGain);
-        ob.start(this.nextNoteTime);
-        ob.stop(this.nextNoteTime + beatLength);
-      }
-
-      this.nextNoteTime += beatLength;
-      this.currentNote = (this.currentNote + 1) % melody.length;
-      bassStep = (bassStep + 1) % bassPattern.length;
+    // Multi-voice pad for richness - Am chord (A, C, E)
+    const createPadVoice = (freq, detune) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.value = freq;
+      osc.detune.value = detune;
+      gain.gain.value = 0.04 * this.volume;
+      osc.connect(gain);
+      gain.connect(padFilter);
+      osc.start();
+      return osc;
     };
 
-    // Scheduler that runs frequently to keep audio buffer filled
-    this.bgmScheduler = setInterval(() => {
-      // Schedule notes that are coming up within the lookahead window
-      while (this.nextNoteTime < ctx.currentTime + this.scheduleAheadTime) {
-        scheduleNote();
+    // Rich detuned pad voices
+    createPadVoice(220, 0);    // A3
+    createPadVoice(220, 8);    // A3 slightly sharp
+    createPadVoice(262, -5);   // C4 slightly flat
+    createPadVoice(330, 12);   // E4 slightly sharp
+
+    // Slow filter sweep for movement
+    const filterLFO = ctx.createOscillator();
+    const filterLFOGain = ctx.createGain();
+    filterLFO.frequency.value = 0.08; // Slow sweep
+    filterLFOGain.gain.value = 400;
+    filterLFO.connect(filterLFOGain);
+    filterLFOGain.connect(padFilter.frequency);
+    filterLFO.start();
+
+    // SUB BASS - modern sub bass with subtle movement
+    const bassFilter = ctx.createBiquadFilter();
+    bassFilter.type = 'lowpass';
+    bassFilter.frequency.value = 250;
+    bassFilter.connect(this.bgmGain);
+
+    const bassOsc = ctx.createOscillator();
+    const bassGain = ctx.createGain();
+    bassOsc.type = 'sine';
+    bassOsc.frequency.value = 55; // A1 - sub bass foundation
+    bassGain.gain.value = 0.15 * this.volume;
+    bassOsc.connect(bassGain);
+    bassGain.connect(bassFilter);
+    bassOsc.start();
+
+    // Bass LFO for subtle pulse
+    const bassLFO = ctx.createOscillator();
+    const bassLFOGain = ctx.createGain();
+    bassLFO.frequency.value = 0.12;
+    bassLFOGain.gain.value = 3;
+    bassLFO.connect(bassLFOGain);
+    bassLFOGain.connect(bassOsc.frequency);
+    bassLFO.start();
+
+    // DELAY EFFECT - Modern delay with feedback for spaciousness
+    const melodyDelay = ctx.createDelay();
+    melodyDelay.delayTime.value = 0.375; // Dotted eighth note delay
+    const delayFeedback = ctx.createGain();
+    delayFeedback.gain.value = 0.35;
+    const delayMix = ctx.createGain();
+    delayMix.gain.value = 0.4;
+    
+    melodyDelay.connect(delayFeedback);
+    delayFeedback.connect(melodyDelay);
+    melodyDelay.connect(delayMix);
+    delayMix.connect(this.bgmGain);
+
+    // MELODY - Modern pentatonic lead synth
+    const notes = [
+      880,   // A5
+      1047,  // C6
+      1175,  // D6
+      1319,  // E6
+      1568,  // G6
+      1760,  // A6
+    ];
+
+    // Modern melodic pattern
+    const pattern = [
+      { noteIdx: 0, dur: 0.5 },
+      { noteIdx: 2, dur: 0.25 },
+      { noteIdx: 4, dur: 0.25 },
+      { noteIdx: 3, dur: 0.5 },
+      { noteIdx: 1, dur: 0.5 },
+      { noteIdx: 5, dur: 0.5 },
+      { noteIdx: 2, dur: 1.0 },
+    ];
+
+    const tempo = 120; // Modern, upbeat tempo
+    const secondsPerBeat = 60.0 / tempo;
+    this.nextNoteTime = ctx.currentTime + 0.1;
+    this.currentNote = 0;
+    this.scheduleAheadTime = 0.3;
+
+    const scheduleMelodyNote = (time, freq, dur) => {
+      // Main lead synth - bright triangle wave
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, time);
+      
+      // Modern ADSR envelope - punchy attack
+      gain.gain.setValueAtTime(0.0001, time);
+      gain.gain.linearRampToValueAtTime(0.18 * this.volume, time + 0.01);
+      gain.gain.linearRampToValueAtTime(0.12 * this.volume, time + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+      
+      osc.connect(gain);
+      gain.connect(this.bgmGain);
+      gain.connect(melodyDelay); // Send to delay
+      osc.start(time);
+      osc.stop(time + dur);
+
+      // Bright harmonics for modern sound
+      const harm = ctx.createOscillator();
+      const harmGain = ctx.createGain();
+      harm.type = 'sine';
+      harm.frequency.setValueAtTime(freq * 2, time);
+      harmGain.gain.setValueAtTime(0.0001, time);
+      harmGain.gain.linearRampToValueAtTime(0.04 * this.volume, time + 0.01);
+      harmGain.gain.exponentialRampToValueAtTime(0.0001, time + dur * 0.7);
+      harm.connect(harmGain);
+      harmGain.connect(this.bgmGain);
+      harm.start(time);
+      harm.stop(time + dur);
+    };
+
+    // MODERN HI-HAT - Adds rhythm and energy
+    const playHiHat = (time) => {
+      const bufferSize = Math.floor(ctx.sampleRate * 0.06);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
       }
-    }, 25); // Check every 25ms
+      
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.value = 8000; // Crispy high frequency
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.08 * this.volume, time);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.06);
+      
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.bgmGain);
+      src.start(time);
+    };
+
+    // ELECTRONIC KICK - Modern electronic kick drum
+    const playKick = (time) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.frequency.setValueAtTime(150, time);
+      osc.frequency.exponentialRampToValueAtTime(40, time + 0.15);
+      
+      gain.gain.setValueAtTime(0.25 * this.volume, time);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.2);
+      
+      osc.connect(gain);
+      gain.connect(this.bgmGain);
+      osc.start(time);
+      osc.stop(time + 0.21);
+    };
+
+    let beatCount = 0;
+
+    // Main scheduler - Coordinates all elements
+    this.bgmScheduler = setInterval(() => {
+      while (this.nextNoteTime < ctx.currentTime + this.scheduleAheadTime) {
+        const p = pattern[this.currentNote % pattern.length];
+        const beatLength = secondsPerBeat * p.dur;
+        const freq = notes[p.noteIdx];
+        
+        // Schedule melody
+        scheduleMelodyNote(this.nextNoteTime, freq, beatLength);
+        
+        // Modern drum pattern - kick on beats 1 and 3
+        const beatPos = beatCount % 4;
+        if (beatPos === 0 || beatPos === 2) {
+          playKick(this.nextNoteTime);
+        }
+        
+        // Hi-hats on eighth notes for modern groove
+        if (beatCount % 2 === 0) {
+          playHiHat(this.nextNoteTime);
+          playHiHat(this.nextNoteTime + secondsPerBeat * 0.5);
+        }
+        
+        this.nextNoteTime += beatLength;
+        this.currentNote = (this.currentNote + 1) % pattern.length;
+        beatCount++;
+      }
+    }, 80);
   }
 
   // Ensure BGM is started on first user gesture (autoplay policy compliance)
