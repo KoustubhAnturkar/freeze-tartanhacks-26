@@ -7,9 +7,9 @@ const LEVELS = {
     {
       platforms: [
         { x: 0, y: 200, w: 200, h: 50 },
-        { x: 250, y: 400, w: 150, h: 20, hasIcicles: true },
-        { x: 450, y: 320, w: 120, h: 20, hasIcicles: true },
-        { x: 620, y: 200, w: 180, h: 50, hasIcicles: true },
+        { x: 250, y: 400, w: 150, h: 20, hasIcicles: false },
+        { x: 450, y: 320, w: 120, h: 20, hasIcicles: false },
+        { x: 620, y: 200, w: 180, h: 50, hasIcicles: false },
       ],
       goal: { x: 680, y: 130, w: 35, h: 35 },
       collectibles: [
@@ -22,12 +22,12 @@ const LEVELS = {
     {
       platforms: [
         { x: 0, y: 200, w: 200, h: 50 },
-        { x: 200, y: 580, w: 450, h: 20, hasIcicles: true },
-        { x: 395, y: 0, w: 10, h: 500, hasIcicles: true },
-        { x: 405, y: 480, w: 100, h: 20, hasIcicles: true },
-        { x: 550, y: 380, w: 100, h: 20, hasIcicles: true },
-        { x: 405, y: 280, w: 100, h: 20, hasIcicles: true },
-        { x: 650, y: 250, w: 10, h: 350, hasIcicles: true },
+        { x: 200, y: 580, w: 450, h: 20, hasIcicles: false },
+        { x: 395, y: 0, w: 10, h: 500, hasIcicles: false },
+        { x: 405, y: 480, w: 100, h: 20, hasIcicles: false },
+        { x: 550, y: 380, w: 100, h: 20, hasIcicles: false },
+        { x: 405, y: 280, w: 100, h: 20, hasIcicles: false },
+        { x: 650, y: 250, w: 10, h: 350, hasIcicles: false },
         { x: 650, y: 200, w: 150, h: 50 },
       ],
       goal: { x: 700, y: 130, w: 35, h: 35 },
@@ -42,11 +42,11 @@ const LEVELS = {
     {
       platforms: [
         { x: 0, y: 200, w: 150, h: 50 },
-        { x: 200, y: 350, w: 120, h: 20, hasIcicles: true },
-        { x: 370, y: 280, w: 100, h: 20, hasIcicles: true },
-        { x: 520, y: 400, w: 100, h: 20, hasIcicles: true },
-        { x: 370, y: 480, w: 100, h: 20, hasIcicles: true },
-        { x: 650, y: 300, w: 150, h: 50, hasIcicles: true },
+        { x: 200, y: 350, w: 120, h: 20, hasIcicles: false },
+        { x: 370, y: 280, w: 100, h: 20, hasIcicles: false },
+        { x: 520, y: 400, w: 100, h: 20, hasIcicles: false },
+        { x: 370, y: 480, w: 100, h: 20, hasIcicles: false },
+        { x: 650, y: 300, w: 150, h: 50, hasIcicles: false },
       ],
       goal: { x: 690, y: 230, w: 35, h: 35 },
       collectibles: [
@@ -60,6 +60,32 @@ const LEVELS = {
       ],
     },
 
+    {
+      platforms: [
+        { x: 0, y: 150, w: 200, h: 20, hasIcicles: false },
+        { x: 250, y: 300, w: 400, h: 20, hasIcicles: false },
+        { x: 50, y: 500, w: 200, h: 20, hasIcicles: false },
+        { x: 350, y: 500, w: 300, h: 20, hasIcicles: false },
+        { x: 700, y: 400, w: 100, h: 20, hasIcicles: false }
+      ],
+      goal: { x: 740, y: 330, w: 35, h: 35 },
+
+      collectibles: [
+        { x: 450, y: 250, w: 20, h: 20 },
+        { x: 500, y: 450, w: 20, h: 20 },
+        { x: 100, y: 450, w: 20, h: 20 },
+      ],
+      polarBears: [
+        // Bear 1: Patrols the top bridge (platform y = 300)
+        { x: 300, y: 265, w: 40, h: 35, minX: 250, maxX: 620, speed: 1.5, dir: 1 },
+
+        // Bear 2: Patrols the low road (platform y = 500)
+        { x: 400, y: 465, w: 40, h: 35, minX: 350, maxX: 630, speed: 2.2, dir: -1 },
+        { x: 200, y: 465, w: 40, h: 35, minX: 50, maxX: 220, speed: 1.1 } // On fourth platform
+        // { x: 200, y: 560, w: 40, h: 35, minX: 200, maxX: 280, speed: 1 } // On 3RD platform
+      ]
+
+    },
     // Level 4 - Icicle Gauntlet (HARD - Heavy Icicle Focus)
     {
       platforms: [
