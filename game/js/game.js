@@ -4,8 +4,8 @@ class Game {
     // Setup canvas
     this.canvas = document.getElementById('c');
     this.ctx = this.canvas.getContext('2d');
-    this.width = this.canvas.width = Math.min(CONFIG.MAX_WIDTH, window.innerWidth);
-    this.height = this.canvas.height = Math.min(CONFIG.MAX_HEIGHT, window.innerHeight);
+    this.width = this.canvas.width = CONFIG.MAX_WIDTH;
+    this.height = this.canvas.height = CONFIG.MAX_HEIGHT;
 
     // Initialize game components
     this.renderer = new Renderer(this.ctx, this.width, this.height);
@@ -34,7 +34,7 @@ class Game {
     if (this.gameState.isTutorialActive()) {
       const tutorial = document.getElementById('tutorial');
       tutorial.style.display = 'block';
-      
+
       document.getElementById('skipBtn').onclick = () => {
         if (typeof SOUNDS !== 'undefined' && SOUNDS && SOUNDS.play) SOUNDS.play('button');
         // Ensure BGM is running when tutorial exits
@@ -50,9 +50,9 @@ class Game {
   // Update game state
   update() {
     // Don't update during tutorial or transitions
-    if (this.gameState.isTutorialActive() || 
-        this.gameState.isWon() || 
-        this.gameState.isTransitioning()) {
+    if (this.gameState.isTutorialActive() ||
+      this.gameState.isWon() ||
+      this.gameState.isTransitioning()) {
       return;
     }
 
@@ -90,12 +90,14 @@ class Game {
 
   // Draw everything
   draw() {
-    // Clear screen
-    this.renderer.clear(CONFIG.COLORS.BACKGROUND);
+    // Draw background scenery (Sky + Distant Mountains)
+    this.renderer.drawScenery(CONFIG.COLORS);
 
-    // Draw level elements
-    this.renderer.drawPlatforms(this.gameState.getPlatforms(), CONFIG.COLORS);
+    // Draw goal (Massive mountain in background)
     this.renderer.drawGoal(this.gameState.getGoal(), CONFIG.COLORS);
+
+    // Draw level elements (Platforms in foreground)
+    this.renderer.drawPlatforms(this.gameState.getPlatforms(), CONFIG.COLORS);
 
     // Draw player
     this.player.draw(this.ctx, CONFIG.COLORS);
