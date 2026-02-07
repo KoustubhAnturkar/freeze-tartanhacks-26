@@ -78,6 +78,10 @@ class Renderer {
       if (platform.hasIcicles) {
         this.drawPlatformIcicles(platform);
       }
+
+      // if (platform.hasCollectible) {
+      //   this.drawCollectible(platform);
+      // }
     });
   }
 
@@ -145,6 +149,65 @@ class Renderer {
 
     // Reset text alignment
     this.ctx.textAlign = "left";
+  }
+
+  drawCollectible(platform) {
+    const x = platform.x + platform.w / 2;
+    const y = platform.y - 20;
+    // Scale factor (using the V1 scale which was slightly smaller/crisper)
+    const s = 2 / 3;
+
+    this.ctx.save();
+    // Bobbing animation
+    const bob = Math.sin(Date.now() / 200) * 3;
+    this.ctx.translate(x + 10, y + 10 + bob);
+    this.ctx.scale(s, s);
+
+    // --- 1. THE BODY (From First Version) ---
+    this.ctx.fillStyle = "#000";
+    this.ctx.beginPath();
+
+    // Main body block
+    this.ctx.rect(-12, -5, 20, 14);
+
+    // Back leg
+    this.ctx.rect(-12, 9, 6, 6);
+
+    // Front leg
+    this.ctx.rect(2, 9, 6, 6);
+
+    // Tail (Pointy)
+    this.ctx.moveTo(-12, -5);
+    this.ctx.lineTo(-14, -12);
+    this.ctx.lineTo(-8, -5);
+    this.ctx.fill();
+
+    // --- 2. THE HEAD (From First Version) ---
+    this.ctx.beginPath();
+
+    // Neck/Head area
+    this.ctx.rect(0, -15, 14, 12);
+
+    // Snout/Beard
+    this.ctx.moveTo(14, -10);
+    this.ctx.lineTo(18, -10); // Nose tip
+    this.ctx.lineTo(14, 0); // Chin
+
+    // Ears (Pointy)
+    this.ctx.moveTo(2, -15);
+    this.ctx.lineTo(4, -22); // Ear tip
+    this.ctx.lineTo(8, -15);
+    this.ctx.fill();
+
+    // --- 3. THE COLLAR (From Second Version - Fixed Placement) ---
+    // Placing it exactly where the head meets the body
+    this.ctx.fillStyle = "#DC2626"; // Bright Red
+
+    // A simple band around the neck area
+    // x=0 (start of head), y=-3 (bottom of head block), w=14 (width of head)
+    this.ctx.fillRect(-3, -4, 14, 4);
+
+    this.ctx.restore();
   }
 
   // Draw collectibles (Best of both worlds: V1 Body + V2 Collar)
