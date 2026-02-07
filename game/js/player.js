@@ -8,26 +8,18 @@ class Player {
     this.vx = 0; // velocity x
     this.vy = 0; // velocity y
     this.onGround = false;
+    this.prevOnGround = false;
   }
 
   // Update player physics and handle collisions
-  update(keys, platforms, gravity, speed, jumpForce, deceleration) {
+  update(keys, platforms, gravity, speed, jumpForce) {
     // Horizontal movement
     if (keys.left) {
       this.vx = -speed;
     } else if (keys.right) {
       this.vx = speed;
     } else {
-      // Apply deceleration when no horizontal input and not on ground
-      if(!this.onGround) {
-        if(this.vx > 0) {
-          this.vx = Math.max(0, this.vx + deceleration); // slow down in air
-        } else {
-          this.vx = Math.min(0, this.vx - deceleration); // slow down in air
-        }
-      } else {
-        this.vx = 0; // stop immediately on ground
-      }
+      this.vx = 0;
     }
 
     // Apply gravity
@@ -37,6 +29,7 @@ class Player {
     this.x += this.vx;
     this.y += this.vy;
 
+    this.prevOnGround = this.onGround;
     this.onGround = false;
 
     // Platform collision detection
@@ -69,6 +62,16 @@ class Player {
     // Jump
     if (keys.jump && this.onGround) {
       this.vy = jumpForce;
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('jump');
+      }
+    }
+
+    // Play landing sound when player lands
+    if (!this.prevOnGround && this.onGround) {
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('land');
+      }
     }
   }
 
