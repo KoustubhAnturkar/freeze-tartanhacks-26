@@ -13,6 +13,10 @@ class Game {
     this.gameState = new GameState(LEVELS, CONFIG.LEVEL_TRANSITION_DELAY);
     this.player = new Player(50, 20, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
 
+    // Initialize cutscene manager
+    this.cutsceneManager = new CutsceneManager();
+    this.waitingForCutscene = false;
+
     // Initialize sounds and ensure BGM starts/resumes on user gesture
     if (typeof SOUNDS !== 'undefined' && SOUNDS) {
       SOUNDS.init();
@@ -27,6 +31,9 @@ class Game {
 
     // Start game loop
     this.gameLoop();
+
+    // Show intro cutscene before level 1
+    this.showCutsceneIfNeeded(0);
   }
 
   // Setup tutorial overlay
@@ -47,12 +54,27 @@ class Game {
     }
   }
 
+  // Show cutscene if one exists for the current level
+  showCutsceneIfNeeded(level) {
+    if (this.cutsceneManager.shouldPlayCutscene(level)) {
+      this.waitingForCutscene = true;
+      this.cutsceneManager.play(level, () => {
+        this.waitingForCutscene = false;
+        // Start BGM after cutscene if available
+        if (typeof SOUNDS !== 'undefined' && SOUNDS && SOUNDS.startBGM) {
+          try { SOUNDS.startBGM(); } catch (e) {}
+        }
+      });
+    }
+  }
+
   // Update game state
   update() {
-    // Don't update during tutorial or transitions
+    // Don't update during tutorial, transitions, or cutscenes
     if (this.gameState.isTutorialActive() ||
       this.gameState.isWon() ||
-      this.gameState.isTransitioning()) {
+      this.gameState.isTransitioning() ||
+      this.waitingForCutscene) {
       return;
     }
 
@@ -136,7 +158,7 @@ class Game {
 
 // Start the game when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  new Game();
+  window.game = new Game();
 });
 
 // Register service worker for offline support
