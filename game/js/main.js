@@ -14,6 +14,7 @@ document.write('<script src="js/player.js"></script>');
 document.write('<script src="js/renderer.js"></script>');
 document.write('<script src="js/input.js"></script>');
 document.write('<script src="js/gameState.js"></script>');
+document.write('<script src="js/cutscene.js"></script>');
 
 // Load main game controller (this starts the game)
 document.write('<script src="js/game.js"></script>');
