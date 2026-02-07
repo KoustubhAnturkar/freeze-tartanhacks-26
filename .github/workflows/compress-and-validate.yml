@@ -1,0 +1,74 @@
+name: Compress and Validate Game Size
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  compress-and-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make compressor script executable
+        run: chmod +x compressor.sh
+
+      - name: Run compressor script
+        run: ./compressor.sh
+
+      - name: Check if compressed file exists
+        run: |
+          if [ ! -f "compressed/game_compressed.tar.gz" ]; then
+            echo "❌ Error: Compressed file not found!"
+            exit 1
+          fi
+          echo "✅ Compressed file created successfully"
+
+      - name: Get compressed file size
+        id: filesize
+        run: |
+          # Get file size in bytes
+          SIZE_BYTES=$(stat -c%s "compressed/game_compressed.tar.gz" 2>/dev/null || stat -f%z "compressed/game_compressed.tar.gz")
+          SIZE_KB=$((SIZE_BYTES / 1024))
+          
+          echo "size_bytes=${SIZE_BYTES}" >> $GITHUB_OUTPUT
+          echo "size_kb=${SIZE_KB}" >> $GITHUB_OUTPUT
+          
+          echo "📦 Compressed file size: ${SIZE_BYTES} bytes (${SIZE_KB} KB)"
+
+      - name: Validate file size is below 15KB
+        run: |
+          SIZE_BYTES=${{ steps.filesize.outputs.size_bytes }}
+          SIZE_KB=${{ steps.filesize.outputs.size_kb }}
+          MAX_SIZE_BYTES=$((15 * 1024))  # 15KB in bytes
+          
+          echo "Current size: ${SIZE_BYTES} bytes (${SIZE_KB} KB)"
+          echo "Maximum allowed: ${MAX_SIZE_BYTES} bytes (15 KB)"
+          
+          if [ ${SIZE_BYTES} -gt ${MAX_SIZE_BYTES} ]; then
+            echo "❌ FAILURE: Compressed file (${SIZE_KB} KB) exceeds 15KB limit!"
+            echo "Please reduce the game size by:"
+            echo "  - Removing unnecessary files"
+            echo "  - Optimizing images"
+            echo "  - Simplifying code"
+            exit 1
+          else
+            REMAINING=$((MAX_SIZE_BYTES - SIZE_BYTES))
+            REMAINING_KB=$((REMAINING / 1024))
+            echo "✅ SUCCESS: Compressed file is within the 15KB limit!"
+            echo "📊 You have ${REMAINING} bytes (${REMAINING_KB} KB) remaining"
+          fi
+
+      - name: Upload compressed artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-compressed
+          path: compressed/game_compressed.tar.gz
+          retention-days: 30
+

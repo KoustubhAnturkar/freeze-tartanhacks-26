@@ -1,4 +1,4 @@
 .idea
 compressed
-.DS_Store
-
+**/.DS_Store
+test_compressor.sh
