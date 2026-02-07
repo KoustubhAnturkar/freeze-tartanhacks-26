@@ -71,11 +71,16 @@ class Game {
     // Let input poll run to handle step sounds
     if (this.input && typeof this.input.poll === 'function') this.input.poll();
 
-    // Check if player fell off screen
     if (this.player.y > this.height) {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall');
       }
+      
+      // --- CHANGE START: Reset Points ---
+      // Reloading the level resets the collectibles list from the original data
+      this.gameState.loadLevel(this.gameState.getCurrentLevel());
+      // --- CHANGE END ---
+
       this.player.reset(50, this.height - 100);
     }
 
