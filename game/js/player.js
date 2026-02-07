@@ -8,6 +8,7 @@ class Player {
     this.vx = 0; // velocity x
     this.vy = 0; // velocity y
     this.onGround = false;
+    this.prevOnGround = false;
   }
 
   // Update player physics and handle collisions
@@ -28,6 +29,7 @@ class Player {
     this.x += this.vx;
     this.y += this.vy;
 
+    this.prevOnGround = this.onGround;
     this.onGround = false;
 
     // Platform collision detection
@@ -60,6 +62,16 @@ class Player {
     // Jump
     if (keys.jump && this.onGround) {
       this.vy = jumpForce;
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('jump');
+      }
+    }
+
+    // Play landing sound when player lands
+    if (!this.prevOnGround && this.onGround) {
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('land');
+      }
     }
   }
 

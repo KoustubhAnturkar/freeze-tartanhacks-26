@@ -13,6 +13,15 @@ class Game {
     this.gameState = new GameState(LEVELS, CONFIG.LEVEL_TRANSITION_DELAY);
     this.player = new Player(50, this.height - 100, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
 
+    // Initialize sounds and ensure BGM starts/resumes on user gesture
+    if (typeof SOUNDS !== 'undefined' && SOUNDS) {
+      SOUNDS.init();
+      // Ensure BGM will start when user interacts (autoplay policies)
+      try { SOUNDS.ensureBGMOnGesture(); } catch (e) {}
+      // Attempt to start immediately in case audio is already allowed
+      try { SOUNDS.startBGM(); } catch (e) {}
+    }
+
     // Setup tutorial
     this.setupTutorial();
 
@@ -27,6 +36,11 @@ class Game {
       tutorial.style.display = 'block';
 
       document.getElementById('skipBtn').onclick = () => {
+        if (typeof SOUNDS !== 'undefined' && SOUNDS && SOUNDS.play) SOUNDS.play('button');
+        // Ensure BGM is running when tutorial exits
+        if (typeof SOUNDS !== 'undefined' && SOUNDS && SOUNDS.startBGM) {
+          try { SOUNDS.startBGM(); } catch (e) {}
+        }
         tutorial.style.display = 'none';
         this.gameState.completeTutorial();
       };
@@ -52,13 +66,22 @@ class Game {
       CONFIG.JUMP_FORCE
     );
 
+    // Let input poll run to handle step sounds
+    if (this.input && typeof this.input.poll === 'function') this.input.poll();
+
     // Check if player fell off screen
     if (this.player.y > this.height) {
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('fall');
+      }
       this.player.reset(50, this.height - 100);
     }
 
     // Check goal collision
     if (this.gameState.checkGoalCollision(this.player)) {
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('levelComplete');
+      }
       this.gameState.markLevelComplete(() => {
         this.player.reset(50, this.height - 100);
       });

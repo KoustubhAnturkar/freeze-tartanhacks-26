@@ -6,6 +6,9 @@ document.write('<script src="js/config.js"></script>');
 // Load level data
 document.write('<script src="js/levels.js"></script>');
 
+// Load sound manager
+document.write('<script src="js/sound.js"></script>');
+
 // Load game classes
 document.write('<script src="js/player.js"></script>');
 document.write('<script src="js/renderer.js"></script>');
