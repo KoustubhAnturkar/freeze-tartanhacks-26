@@ -50,15 +50,15 @@ class Renderer {
     this.ctx.arc(x, y, 30 * scale, 0, Math.PI * 2);
 
     // Left overlapping circle
-    this.ctx.moveTo((x - 25 * scale) + 25 * scale, y + 10 * scale);
+    this.ctx.moveTo(x - 25 * scale + 25 * scale, y + 10 * scale);
     this.ctx.arc(x - 25 * scale, y + 10 * scale, 25 * scale, 0, Math.PI * 2);
 
     // Right overlapping circle
-    this.ctx.moveTo((x + 25 * scale) + 28 * scale, y + 5 * scale);
+    this.ctx.moveTo(x + 25 * scale + 28 * scale, y + 5 * scale);
     this.ctx.arc(x + 25 * scale, y + 5 * scale, 28 * scale, 0, Math.PI * 2);
 
     // Top-ish circle to add fluff
-    this.ctx.moveTo((x + 10 * scale) + 25 * scale, y - 15 * scale);
+    this.ctx.moveTo(x + 10 * scale + 25 * scale, y - 15 * scale);
     this.ctx.arc(x + 10 * scale, y - 15 * scale, 25 * scale, 0, Math.PI * 2);
 
     this.ctx.fill();
@@ -74,6 +74,10 @@ class Renderer {
       // Snow Cap
       this.ctx.fillStyle = colors.PLATFORM_TOP;
       this.ctx.fillRect(platform.x, platform.y, platform.w, 6);
+
+      if (platform.hasIcicles) {
+        this.drawPlatformIcicles(platform);
+      }
     });
   }
 
@@ -114,7 +118,7 @@ class Renderer {
     const flagY = peakY;
 
     // Pole
-    this.ctx.fillStyle = '#4B5563';
+    this.ctx.fillStyle = "#4B5563";
     this.ctx.fillRect(flagX - 1, flagY - 25, 2, 25);
 
     // Flag Triangle
@@ -186,11 +190,11 @@ class Renderer {
       // Snout/Beard
       ctx.moveTo(14, -10);
       ctx.lineTo(18, -10); // Nose tip
-      ctx.lineTo(14, 0);   // Chin
+      ctx.lineTo(14, 0); // Chin
 
       // Ears (Pointy)
       ctx.moveTo(2, -15);
-      ctx.lineTo(4, -22);  // Ear tip
+      ctx.lineTo(4, -22); // Ear tip
       ctx.lineTo(8, -15);
       ctx.fill();
 
@@ -244,11 +248,11 @@ class Renderer {
     // Snout/Beard
     ctx.moveTo(14, -10);
     ctx.lineTo(18, -10); // Nose tip
-    ctx.lineTo(14, 0);   // Chin
+    ctx.lineTo(14, 0); // Chin
 
     // Ears (Pointy)
     ctx.moveTo(2, -15);
-    ctx.lineTo(4, -22);  // Ear tip
+    ctx.lineTo(4, -22); // Ear tip
     ctx.lineTo(8, -15);
     ctx.fill();
 
@@ -259,7 +263,7 @@ class Renderer {
     ctx.restore();
   }
   // Draw icicles as hanging spikes
-  drawIcicles(icicles){
+  drawIcicles(icicles) {
     icicles.forEach((icicle) => {
       const ctx = this.ctx;
       const x = icicle.x;
@@ -269,31 +273,31 @@ class Renderer {
 
       // Main icicle body - light blue with gradient
       const gradient = ctx.createLinearGradient(x, y, x, y + h);
-      gradient.addColorStop(0, '#E0F7FF');  // Light blue-white at top
-      gradient.addColorStop(0.5, '#B3E5FC'); // Medium blue
-      gradient.addColorStop(1, '#81D4FA');   // Darker blue at tip
+      gradient.addColorStop(0, "#E0F7FF"); // Light blue-white at top
+      gradient.addColorStop(0.5, "#B3E5FC"); // Medium blue
+      gradient.addColorStop(1, "#81D4FA"); // Darker blue at tip
 
       ctx.fillStyle = gradient;
 
       // Draw icicle as triangle pointing down (pixelated style)
       ctx.beginPath();
-      ctx.moveTo(x, y);                    // Top left
-      ctx.lineTo(x + w, y);                 // Top right
-      ctx.lineTo(x + w / 2, y + h);         // Bottom point (sharp tip)
+      ctx.moveTo(x, y); // Top left
+      ctx.lineTo(x + w, y); // Top right
+      ctx.lineTo(x + w / 2, y + h); // Bottom point (sharp tip)
       ctx.closePath();
       ctx.fill();
 
       // Add white highlight on left side for 3D effect
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
       ctx.beginPath();
       ctx.moveTo(x, y);
       ctx.lineTo(x + w * 0.3, y);
-      ctx.lineTo(x + w / 2 * 0.6, y + h);
+      ctx.lineTo(x + (w / 2) * 0.6, y + h);
       ctx.closePath();
       ctx.fill();
 
       // Add darker edge on right for depth
-      ctx.fillStyle = 'rgba(0, 100, 150, 0.3)';
+      ctx.fillStyle = "rgba(0, 100, 150, 0.3)";
       ctx.beginPath();
       ctx.moveTo(x + w, y);
       ctx.lineTo(x + w * 0.7, y);
@@ -303,11 +307,37 @@ class Renderer {
       ctx.fill();
 
       // Sharp white tip at bottom
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
       ctx.arc(x + w / 2, y + h - 2, 2, 0, Math.PI * 2);
       ctx.fill();
     });
+  }
+
+  // Draw icicles along platform bottom (creates icicle objects and uses drawIcicles)
+  drawPlatformIcicles(platform) {
+    const icicleWidth = 8;
+    const icicleHeight = 20;
+    const spacing = 15;
+    const numIcicles = Math.floor(platform.w / spacing);
+
+    // Create array of icicle objects
+    const icicles = [];
+
+    for (let i = 0; i < numIcicles; i++) {
+      const x = platform.x + i * spacing + spacing / 2 - icicleWidth / 2;
+      const y = platform.y + platform.h;
+
+      icicles.push({
+        x: x,
+        y: y,
+        w: icicleWidth,
+        h: icicleHeight,
+      });
+    }
+
+    // Use the existing drawIcicles method to render them
+    this.drawIcicles(icicles);
   }
 
   // Draw polar bears as pixelated enemies
@@ -332,26 +362,26 @@ class Renderer {
       }
 
       // Body (white/cream color)
-      ctx.fillStyle = '#F5F5DC';  // Beige-white
+      ctx.fillStyle = "#F5F5DC"; // Beige-white
       ctx.fillRect(x + 5, y + 10, w - 10, h - 10);
 
       // Head (rounded)
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = "#FFFFFF";
       ctx.beginPath();
       ctx.arc(x + w - 10, y + 12, 8, 0, Math.PI * 2);
       ctx.fill();
 
       // Ears
-      ctx.fillStyle = '#F5F5DC';
+      ctx.fillStyle = "#F5F5DC";
       ctx.fillRect(x + w - 15, y + 5, 4, 5);
       ctx.fillRect(x + w - 8, y + 5, 4, 5);
 
       // Snout
-      ctx.fillStyle = '#FFE4E1';
+      ctx.fillStyle = "#FFE4E1";
       ctx.fillRect(x + w - 12, y + 14, 6, 4);
 
       // Nose (black)
-      ctx.fillStyle = '#000000';
+      ctx.fillStyle = "#000000";
       ctx.fillRect(x + w - 11, y + 14, 2, 2);
 
       // Eyes (black dots)
@@ -359,14 +389,14 @@ class Renderer {
       ctx.fillRect(x + w - 8, y + 10, 2, 2);
 
       // Legs (4 legs)
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(x + 8, y + h - 8, 6, 8);   // Front left
-      ctx.fillRect(x + 18, y + h - 8, 6, 8);  // Front right
-      ctx.fillRect(x + w - 18, y + h - 8, 6, 8);  // Back left
-      ctx.fillRect(x + w - 8, y + h - 8, 6, 8);   // Back right
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(x + 8, y + h - 8, 6, 8); // Front left
+      ctx.fillRect(x + 18, y + h - 8, 6, 8); // Front right
+      ctx.fillRect(x + w - 18, y + h - 8, 6, 8); // Back left
+      ctx.fillRect(x + w - 8, y + h - 8, 6, 8); // Back right
 
       // Paws (black pads)
-      ctx.fillStyle = '#333333';
+      ctx.fillStyle = "#333333";
       ctx.fillRect(x + 9, y + h - 2, 4, 2);
       ctx.fillRect(x + 19, y + h - 2, 4, 2);
       ctx.fillRect(x + w - 17, y + h - 2, 4, 2);
