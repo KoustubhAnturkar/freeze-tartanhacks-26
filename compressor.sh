@@ -10,7 +10,7 @@ set -e  # Exit on error
 SOURCE_DIR="game"
 TEMP_DIR="game_minified_temp"
 OUTPUT_DIR="compressed"
-ARCHIVE_NAME="compressed_game.tar.gz"
+ARCHIVE_NAME="game_compressed.tar.gz"
 
 # Colors for output
 GREEN='\033[0;32m'
