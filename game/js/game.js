@@ -21,10 +21,29 @@ class Game {
     if (typeof SOUNDS !== 'undefined' && SOUNDS) {
       SOUNDS.init();
       // Ensure BGM will start when user interacts (autoplay policies)
-      try { SOUNDS.ensureBGMOnGesture(); } catch (e) {}
+      try { SOUNDS.ensureBGMOnGesture(); } catch (e) { }
       // Attempt to start immediately in case audio is already allowed
-      try { SOUNDS.startBGM(); } catch (e) {}
+      try { SOUNDS.startBGM(); } catch (e) { }
     }
+    this.resize = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      this.isLandscape = vw >= vh;
+
+      // Approx height of your control strip:
+      // buttons are 80px tall and #controls has 30px bottom padding [file:2]
+      const controlsH = this.isLandscape ? (80 + 30 + 10) : 0; // +10 buffer
+
+      this.canvas.style.position = "fixed";
+      this.canvas.style.left = "0";
+      this.canvas.style.top = "0";
+      this.canvas.style.width = "100vw";
+      this.canvas.style.height = `calc(100svh)`;
+    };
+
+    window.addEventListener("resize", this.resize, { passive: true });
+    window.addEventListener("orientationchange", this.resize, { passive: true });
+    this.resize();
 
     // Setup tutorial
     this.setupTutorial();
@@ -46,7 +65,7 @@ class Game {
         if (typeof SOUNDS !== 'undefined' && SOUNDS && SOUNDS.play) SOUNDS.play('button');
         // Ensure BGM is running when tutorial exits
         if (typeof SOUNDS !== 'undefined' && SOUNDS && SOUNDS.startBGM) {
-          try { SOUNDS.startBGM(); } catch (e) {}
+          try { SOUNDS.startBGM(); } catch (e) { }
         }
         tutorial.style.display = 'none';
         this.gameState.completeTutorial();
@@ -62,7 +81,7 @@ class Game {
         this.waitingForCutscene = false;
         // Start BGM after cutscene if available
         if (typeof SOUNDS !== 'undefined' && SOUNDS && SOUNDS.startBGM) {
-          try { SOUNDS.startBGM(); } catch (e) {}
+          try { SOUNDS.startBGM(); } catch (e) { }
         }
       });
     }
@@ -71,6 +90,8 @@ class Game {
   // Update game state
   update() {
     // Don't update during tutorial, transitions, or cutscenes
+    if (!this.isLandscape) return;
+
     if (this.gameState.isTutorialActive() ||
       this.gameState.isWon() ||
       this.gameState.isTransitioning() ||
@@ -97,6 +118,8 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall');
       }
+      // RESET COLLECTIBLES: Reload the level to respawn items
+      this.gameState.loadLevel(this.gameState.getCurrentLevel());
       this.player.reset(50, 20);
     }
 
@@ -121,6 +144,8 @@ class Game {
 
   // Draw everything
   draw() {
+    if (!this.isLandscape) return;
+
     // Draw background scenery (Sky + Distant Mountains)
     this.renderer.drawScenery(CONFIG.COLORS);
 
