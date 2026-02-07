@@ -38,40 +38,31 @@ const LEVELS = {
       ],
     },
 
-    // Level 3 - Icicle Danger Zone
+        // Level 3 - Icicle Danger Zone
     {
-      platforms: [
-        { x: 0, y: 200, w: 150, h: 50 },
-        { x: 200, y: 350, w: 120, h: 20, hasIcicles: true },
-        { x: 370, y: 280, w: 100, h: 20, hasIcicles: true },
-        { x: 520, y: 400, w: 100, h: 20, hasIcicles: true },
-        { x: 370, y: 480, w: 100, h: 20, hasIcicles: true },
-        { x: 650, y: 300, w: 150, h: 50, hasIcicles: true },
-      ],
-      goal: { x: 690, y: 230, w: 35, h: 35 },
-      collectibles: [
-        { x: 230, y: 310, w: 20, h: 20 },
-        { x: 550, y: 360, w: 20, h: 20 },
-      ],
-      icicles: [
-        // Icicles hanging from ceiling - avoid these!
-        { x: 180, y: 0, w: 20, h: 60 }, // Above first gap
-        { x: 340, y: 0, w: 25, h: 80 }, // Above second platform
-        { x: 490, y: 0, w: 20, h: 70 }, // Between platforms
-        { x: 600, y: 0, w: 30, h: 90 }, // Before final platform
-        { x: 250, y: 0, w: 18, h: 50 }, // Extra danger
-        { x: 420, y: 0, w: 22, h: 65 }, // Extra danger
-      ],
-      polarBears: [
-        // Polar bears that patrol horizontally - avoid these!
-        { x: 200, y: 310, w: 40, h: 35, minX: 200, maxX: 280, speed: 1 }, // On second platform
-        { x: 520, y: 360, w: 40, h: 35, minX: 520, maxX: 600, speed: 1 }, // On fourth platform
-      ],
-    },
-  ],
-  walls: [
-    { x: 0, y: 0, w: 800, h: 20 }, // Top wall
-    { x: 0, y: 0, w: 0, h: 600 }, // Left wall
-    { x: 800, y: 0, w: 0, h: 600 }, // Right wall
-  ],
+        platforms: [
+            {x: 0, y: 200, w: 150, h: 50},
+            {x: 200, y: 350, w: 120, h: 20},
+            {x: 370, y: 280, w: 100, h: 20},
+            {x: 520, y: 400, w: 100, h: 20},
+            {x: 370, y: 480, w: 100, h: 20},
+            {x: 650, y: 300, w: 150, h: 50}
+        ],
+        goal: {x: 690, y: 230, w: 35, h: 35},
+        collectibles: [
+            {x: 230, y: 310, w: 20, h: 20},
+            {x: 550, y: 360, w: 20, h: 20}
+        ],
+        polarBears: [
+            // Polar bears that patrol horizontally - avoid these!
+            {x: 200, y: 310, w: 40, h: 35, minX: 200, maxX: 280, speed: 1},  // On second platform
+            {x: 520, y: 360, w: 40, h: 35, minX: 520, maxX: 600, speed: 1}     // On fourth platform
+        ]
+        },
+    ],
+    walls: [
+        {x: 0, y: 0, w: 800, h: 20}, // Top wall
+        {x: 0, y: 0, w: 0, h: 600}, // Left wall
+        {x: 800, y: 0, w: 0, h: 600} // Right wall
+    ]
 };
