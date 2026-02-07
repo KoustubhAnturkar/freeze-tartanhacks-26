@@ -68,11 +68,11 @@ class Renderer {
   drawPlatforms(platforms, colors) {
     platforms.forEach((platform) => {
       // Main body (Dark Rock)
-      this.ctx.fillStyle = colors.platform;
+      this.ctx.fillStyle = colors.PLATFORM;
       this.ctx.fillRect(platform.x, platform.y, platform.w, platform.h);
 
       // Snow Cap
-      this.ctx.fillStyle = colors.platformTop;
+      this.ctx.fillStyle = colors.PLATFORM_TOP;
       this.ctx.fillRect(platform.x, platform.y, platform.w, 6);
     });
   }
@@ -88,7 +88,7 @@ class Renderer {
     const baseY = goal.y + goal.h + 50; // Extend base down to overlap with platform
 
     // Mountain Body
-    this.ctx.fillStyle = colors.goal;
+    this.ctx.fillStyle = colors.GOAL;
     this.ctx.beginPath();
     this.ctx.moveTo(visualX, baseY);
     this.ctx.lineTo(cx, peakY);
@@ -118,7 +118,7 @@ class Renderer {
     this.ctx.fillRect(flagX - 1, flagY - 25, 2, 25);
 
     // Flag Triangle
-    this.ctx.fillStyle = colors.goalFlag;
+    this.ctx.fillStyle = colors.GOAL_FLAG;
     this.ctx.beginPath();
     this.ctx.moveTo(flagX, flagY - 25);
     this.ctx.lineTo(flagX + 15, flagY - 18);
