@@ -12,6 +12,21 @@ class Game {
     this.input = new InputHandler();
     this.gameState = new GameState(LEVELS, CONFIG.LEVEL_TRANSITION_DELAY);
     this.player = new Player(50, 20, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
+    this.score = 0;
+    this.lastLevel = this.gameState.getCurrentLevel();
+
+    // Setup small score icon renderer (scotty dog) if the DOM canvas exists
+    const scoreIconEl = document.getElementById('scoreIcon');
+    if (scoreIconEl && scoreIconEl.getContext) {
+      try {
+        const iconCtx = scoreIconEl.getContext('2d');
+        this.scoreIconCanvas = scoreIconEl;
+        this.scoreIconRenderer = new Renderer(iconCtx, scoreIconEl.width, scoreIconEl.height);
+      } catch (e) {
+        this.scoreIconCanvas = null;
+        this.scoreIconRenderer = null;
+      }
+    }
 
     // Initialize sounds and ensure BGM starts/resumes on user gesture
     if (typeof SOUNDS !== 'undefined' && SOUNDS) {
@@ -24,6 +39,10 @@ class Game {
 
     // Setup tutorial
     this.setupTutorial();
+
+    // Initialize score UI
+    const scoreEl = document.getElementById('score');
+    if (scoreEl) scoreEl.textContent = String(this.score);
 
     // Start game loop
     this.gameLoop();
@@ -49,6 +68,14 @@ class Game {
 
   // Update game state
   update() {
+    // Reset score when a new level is loaded
+    const currentLevel = this.gameState.getCurrentLevel();
+    if (this.lastLevel !== currentLevel) {
+      this.lastLevel = currentLevel;
+      this.score = 0;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
+    }
     // Don't update during tutorial or transitions
     if (this.gameState.isTutorialActive() ||
       this.gameState.isWon() ||
@@ -85,6 +112,10 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('collect');
       }
+      // Increment score and update UI
+      this.score += 1;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
     }
 
     // Only allow level completion when all collectibles are gathered
@@ -122,6 +153,17 @@ class Game {
         this.gameState.getTotalLevels(),
         CONFIG.COLORS
       );
+    }
+
+    // Render the small scotty-dog icon into the score canvas (keeps it animated)
+    if (this.scoreIconRenderer && this.scoreIconCanvas) {
+      try {
+        const ic = this.scoreIconCanvas;
+        const icCtx = ic.getContext('2d');
+        icCtx.clearRect(0, 0, ic.width, ic.height);
+        // Draw stationary scotty icon centered in the small canvas
+        this.scoreIconRenderer.drawScottyIcon(0, 0, ic.width, ic.height);
+      } catch (e) {}
     }
   }
 
