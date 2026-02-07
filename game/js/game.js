@@ -49,7 +49,8 @@ class Game {
       this.gameState.getPlatforms(),
       CONFIG.GRAVITY,
       CONFIG.MOVE_SPEED,
-      CONFIG.JUMP_FORCE
+      CONFIG.JUMP_FORCE,
+      CONFIG.DECELERATION
     );
 
     // Check if player fell off screen
