@@ -45,8 +45,7 @@ const CONFIG = {
 
     // UI
     winOverlay: 'rgba(17, 24, 39, 0.8)',
-    winText: '#ffffff'
-  }
+    winText: '#ffffff',
     BACKGROUND: '#fff',
     PLATFORM: '#000',
     PLATFORM_OUTLINE: '#1e90ff',
