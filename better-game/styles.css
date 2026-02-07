@@ -1,0 +1,205 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background: #000;
+  touch-action: none;
+  font-family: Arial, sans-serif;
+}
+
+canvas {
+  display: block;
+  background: #fff;
+  width: 100vw;
+  height: 100svh;
+  /* safe viewport height on mobile */
+  /* object-fit removed to allow stretching/filling */
+  /* Make canvas unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* Control Styles Reverted to Transparent Overlay */
+#controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+
+  /* Remove Ribbon (no background, height, or border) */
+  background: transparent;
+  height: auto;
+  padding: 0 40px 30px 40px;
+  /* Add bottom padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border: none;
+  box-shadow: none;
+}
+
+#dpad,
+#actions {
+  display: flex;
+  gap: 20px;
+  pointer-events: none;
+}
+
+.btn {
+  width: 80px;
+  height: 80px;
+
+  /* Transparent Style */
+  background: rgba(0, 0, 0, 0.4);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Safari/Chrome */
+  -webkit-tap-highlight-color: transparent;
+  /* Remove tap highlight on mobile */
+  -webkit-touch-callout: none;
+  /* Disable long-press menu */
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.1s, background 0.2s;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  background: rgba(30, 144, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#tutorial {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #000;
+  color: #fff;
+  padding: 30px;
+  border: 3px solid #1e90ff;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 85%;
+  display: none;
+}
+
+/* UI: level + score at top-left */
+#ui {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 30;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.45);
+  border: 2px solid rgba(30,144,255,0.6);
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+#ui > div {
+  font-size: 14px;
+  line-height: 1;
+}
+
+#ui span {
+  color: #FFD700; /* gold for level and score number */
+  margin-left: 6px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+}
+
+/* Score container: small icon + number */
+#scoreContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#scoreIcon {
+  width: 44px;
+  height: 44px;
+  image-rendering: optimizeQuality;
+  background: transparent;
+}
+
+#scoreContainer span {
+  font-size: 15px;
+  color: #FFD700; /* gold for higher contrast */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+}
+
+#tutorial h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #1e90ff;
+}
+
+#tutorial p {
+  margin: 8px 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#skipBtn {
+  margin-top: 18px;
+  padding: 12px 28px;
+  background: #1e90ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#skipBtn:active {
+  background: #4169e1;
+}
+
+#rotateOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  z-index: 9999;
+  text-align: center;
+  padding: 24px;
+}
+
+#rotateOverlay .rotateCard {
+  max-width: 320px;
+  border: 2px solid #1e90ff;
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-family: Arial, sans-serif;
+}

@@ -23,12 +23,14 @@ const LEVELS = {
             platforms: [
                 {x: 0, y: 200, w: 200, h: 50},
                 {x: 200, y: 580, w: 450, h: 20},
-                {x: 395, y: 0, w: 10, h: 500},
                 {x: 405, y: 480, w: 100, h: 20},
                 {x: 550, y: 380, w: 100, h: 20},
                 {x: 405, y: 280, w: 100, h: 20},
-                {x: 650, y: 250, w: 10, h: 350},
                 {x: 650, y: 200, w: 150, h: 50}
+            ],
+            wall: [
+                {x: 395, y: 0, w: 10, h: 500},   // Left vertical barrier
+                {x: 650, y: 250, w: 10, h: 350}  // Right vertical barrier
             ],
             goal: {x: 700, y: 130, w: 35, h: 35},
             collectibles: [
