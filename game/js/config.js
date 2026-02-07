@@ -1,9 +1,10 @@
 // Game configuration constants
 const CONFIG = {
   // Physics
-  GRAVITY: 0.5,
-  JUMP_FORCE: -12,
-  MOVE_SPEED: 4,
+  GRAVITY: 0.3,
+  JUMP_FORCE: -10,
+  MOVE_SPEED: 2,
+  DECELERATION: -0.01,
   
   // Player dimensions
   PLAYER_WIDTH: 28,

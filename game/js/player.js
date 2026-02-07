@@ -11,14 +11,23 @@ class Player {
   }
 
   // Update player physics and handle collisions
-  update(keys, platforms, gravity, speed, jumpForce) {
+  update(keys, platforms, gravity, speed, jumpForce, deceleration) {
     // Horizontal movement
     if (keys.left) {
       this.vx = -speed;
     } else if (keys.right) {
       this.vx = speed;
     } else {
-      this.vx = 0;
+      // Apply deceleration when no horizontal input and not on ground
+      if(!this.onGround) {
+        if(this.vx > 0) {
+          this.vx = Math.max(0, this.vx + deceleration); // slow down in air
+        } else {
+          this.vx = Math.min(0, this.vx - deceleration); // slow down in air
+        }
+      } else {
+        this.vx = 0; // stop immediately on ground
+      }
     }
 
     // Apply gravity
