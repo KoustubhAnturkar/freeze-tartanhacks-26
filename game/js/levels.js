@@ -68,6 +68,50 @@ const LEVELS = {
         { x: 520, y: 360, w: 40, h: 35, minX: 520, maxX: 600, speed: 1 }, // On fourth platform
       ],
     },
+
+    // Level 4 - Icicle Gauntlet (HARD - Heavy Icicle Focus)
+    {
+      platforms: [
+        { x: 0, y: 550, w: 140, h: 50 },              // Starting platform - wider
+        { x: 170, y: 470, w: 100, h: 20, hasIcicles: true },  // First jump
+        { x: 310, y: 400, w: 70, h: 20, hasIcicles: true },   // Second platform
+        { x: 170, y: 330, w: 100, h: 20, hasIcicles: true },  // Zigzag back
+        { x: 310, y: 230, w: 90, h: 20, hasIcicles: true },   // Zigzag forward
+        { x: 440, y: 350, w: 110, h: 20, hasIcicles: true },  // Mid section
+        { x: 600, y: 280, w: 100, h: 20, hasIcicles: true },  // Upper right
+        { x: 440, y: 210, w: 100, h: 20, hasIcicles: true },  // Back left high
+        { x: 700, y: 250, w: 100, h: 50 },             // Final safe platform
+      ],
+      goal: { x: 730, y: 180, w: 35, h: 35 },
+      collectibles: [
+        { x: 330, y: 360, w: 20, h: 20 },  // On second platform
+        { x: 600, y: 240, w: 20, h: 20 },  // Upper right
+        { x: 460, y: 170, w: 20, h: 20 },  // High platform
+      ],
+      icicles: [
+        // Strategic icicle placement - challenging but fair
+        { x: 150, y: 0, w: 22, h: 70 },   // Above first jump
+        { x: 195, y: 0, w: 20, h: 65 },   // Over platform
+        { x: 240, y: 0, w: 18, h: 60 },   // Gap coverage
+        { x: 290, y: 0, w: 24, h: 80 },   // Above second platform
+        { x: 335, y: 0, w: 20, h: 70 },   // Platform edge
+        { x: 160, y: 0, w: 20, h: 68 },   // Over zigzag back
+        { x: 210, y: 0, w: 22, h: 75 },   // Coverage
+        { x: 280, y: 0, w: 25, h: 85 },   // Above fourth platform
+        { x: 325, y: 0, w: 20, h: 72 },   // Platform edge
+        { x: 380, y: 0, w: 26, h: 90 },   // Large icicle
+        { x: 420, y: 0, w: 22, h: 75 },   // Over mid platform
+        { x: 470, y: 0, w: 24, h: 82 },   // Mid coverage
+        { x: 520, y: 0, w: 20, h: 70 },   // Gap to upper right
+        { x: 560, y: 0, w: 28, h: 95 },   // Big icicle - requires timing
+        { x: 610, y: 0, w: 22, h: 78 },   // Over upper platform
+        { x: 410, y: 0, w: 20, h: 68 },   // Over back platform
+        { x: 455, y: 0, w: 23, h: 80 },   // High platform coverage
+        { x: 500, y: 0, w: 21, h: 75 },   // More obstacles
+        { x: 650, y: 0, w: 24, h: 85 },   // Before final platform
+        { x: 360, y: 0, w: 20, h: 72 },   // Fill gap
+      ],
+    },
   ],
   walls: [
     { x: 0, y: 0, w: 800, h: 20 }, // Top wall
