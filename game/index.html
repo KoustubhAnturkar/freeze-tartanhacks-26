@@ -1,53 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample Game</title>
-    <style>
-        /* Main styles */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #282c34;
-            color: white;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        h1 {
-            font-size: 3rem;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Penguin Quest</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Main container -->
-    <div class="container">
-        <div>
-            <h1>Welcome to the Game!</h1>
-            <button onclick="startGame()">Start Game</button>
-        </div>
-    </div>
+<canvas id="c"></canvas>
+<div id="ui">
+  <div>LEVEL <span id="lvl">1</span></div>
+</div>
+<div id="controls">
+  <div class="btn" id="bl">←</div>
+  <div class="btn" id="bj">↑</div>
+  <div class="btn" id="br">→</div>
+</div>
+<div id="tutorial">
+  <h2>PENGUIN QUEST</h2>
+  <p>Use arrows to move and jump</p>
+  <p>Reach the goal to complete each level</p>
+  <p>Avoid falling off platforms!</p>
+  <button id="skipBtn">START</button>
+</div>
 
-    <script>
-        // Game logic
-        function startGame() {
-            console.log("Game started!");
-            alert("Let's play!");
-        }
-
-        // Additional functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("Page loaded successfully");
-        });
-    </script>
+<script src="js/main.js"></script>
 </body>
 </html>
-
