@@ -39,7 +39,7 @@ const LEVELS = {
           y: 480,
           w: 100,
           h: 20,
-          hasIcicles: false,
+          hasIcicles: true,
           hasCollectible: true,
         },
         {
