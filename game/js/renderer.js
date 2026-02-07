@@ -47,13 +47,13 @@ class Renderer {
 
   // Draw all platforms with snow caps
   drawPlatforms(platforms, colors) {
-    platforms.forEach(platform => {
+    platforms.forEach((platform) => {
       // Main body (Dark Rock)
-      this.ctx.fillStyle = colors.platform;
+      this.ctx.fillStyle = colors.PLATFORM;
       this.ctx.fillRect(platform.x, platform.y, platform.w, platform.h);
 
       // Snow Cap
-      this.ctx.fillStyle = colors.platformTop;
+      this.ctx.fillStyle = colors.PLATFORM_TOP;
       this.ctx.fillRect(platform.x, platform.y, platform.w, 6);
     });
   }
@@ -93,7 +93,7 @@ class Renderer {
     const flagX = goal.x + goal.w / 2;
     const flagY = goal.y; // Original top of goal box
 
-    this.ctx.fillStyle = '#4B5563';
+    this.ctx.fillStyle = "#4B5563";
     this.ctx.fillRect(flagX - 1, flagY - 25, 2, 25);
 
     this.ctx.fillStyle = colors.goalFlag;
@@ -111,13 +111,13 @@ class Renderer {
     this.ctx.fillRect(0, this.height / 2 - 50, this.width, 100);
 
     this.ctx.fillStyle = colors.winText;
-    this.ctx.font = 'bold 32px Arial';
-    this.ctx.textAlign = 'center';
+    this.ctx.font = "bold 32px Arial";
+    this.ctx.textAlign = "center";
 
-    const message = currentLevel < totalLevels ? 'LEVEL COMPLETE' : 'YOU WIN!';
+    const message = currentLevel < totalLevels ? "LEVEL COMPLETE" : "YOU WIN!";
     this.ctx.fillText(message, this.width / 2, this.height / 2 + 10);
 
     // Reset text alignment
-    this.ctx.textAlign = 'left';
+    this.ctx.textAlign = "left";
   }
 }
