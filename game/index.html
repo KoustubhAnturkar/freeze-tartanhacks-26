@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Penguin Quest</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<canvas id="c"></canvas>
-<div id="ui">
-  <div>LEVEL <span id="lvl">1</span></div>
-</div>
-<div id="controls">
-  <div class="btn" id="bl">←</div>
-  <div class="btn" id="bj">↑</div>
-  <div class="btn" id="br">→</div>
-</div>
-<div id="tutorial">
-  <h2>PENGUIN QUEST</h2>
-  <p>Use arrows to move and jump</p>
-  <p>Reach the goal to complete each level</p>
-  <p>Avoid falling off platforms!</p>
-  <button id="skipBtn">START</button>
-</div>
 
-<script src="js/main.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Penguin Quest</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <canvas id="c"></canvas>
+  <div id="ui">
+    <div>LEVEL <span id="lvl">1</span></div>
+  </div>
+  <div id="controls">
+    <div id="dpad">
+      <div class="btn" id="bl">←</div>
+      <div class="btn" id="br">→</div>
+    </div>
+    <div id="actions">
+      <div class="btn" id="bj">↑</div>
+    </div>
+  </div>
+  <div id="tutorial">
+    <h2>PENGUIN QUEST</h2>
+    <p>Use arrows to move and jump</p>
+    <p>Reach the goal to complete each level</p>
+    <p>Avoid falling off platforms!</p>
+    <button id="skipBtn">START</button>
+  </div>
+
+  <script src="js/main.js"></script>
 </body>
+
 </html>
