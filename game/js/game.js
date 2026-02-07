@@ -11,7 +11,7 @@ class Game {
     this.renderer = new Renderer(this.ctx, this.width, this.height);
     this.input = new InputHandler();
     this.gameState = new GameState(LEVELS, CONFIG.LEVEL_TRANSITION_DELAY);
-    this.player = new Player(50, this.height - 100, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
+    this.player = new Player(50, 20, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
 
     // Initialize sounds and ensure BGM starts/resumes on user gesture
     if (typeof SOUNDS !== 'undefined' && SOUNDS) {
@@ -75,13 +75,7 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall');
       }
-      
-      // --- CHANGE START: Reset Points ---
-      // Reloading the level resets the collectibles list from the original data
-      this.gameState.loadLevel(this.gameState.getCurrentLevel());
-      // --- CHANGE END ---
-
-      this.player.reset(50, this.height - 100);
+      this.player.reset(50, 20);
     }
 
     // Check goal collision
@@ -98,7 +92,7 @@ class Game {
         SOUNDS.play('levelComplete');
       }
       this.gameState.markLevelComplete(() => {
-        this.player.reset(50, this.height - 100);
+        this.player.reset(50, 20);
       });
     }
   }
