@@ -143,6 +143,7 @@ class Renderer {
     this.ctx.textAlign = "left";
   }
 
+  // Draw collectibles (Best of both worlds: V1 Body + V2 Collar)
   drawCollectibles(collectibles) {
     collectibles.forEach((c) => {
       const ctx = this.ctx;
@@ -200,6 +201,124 @@ class Renderer {
       // A simple band around the neck area
       // x=0 (start of head), y=-3 (bottom of head block), w=14 (width of head)
       ctx.fillRect(-3, -4, 14, 4);
+
+      ctx.restore();
+    });
+  }
+
+  // Draw icicles as hanging spikes
+  drawIcicles(icicles) {
+    icicles.forEach((icicle) => {
+      const ctx = this.ctx;
+      const x = icicle.x;
+      const y = icicle.y;
+      const w = icicle.w;
+      const h = icicle.h;
+
+      // Main icicle body - light blue with gradient
+      const gradient = ctx.createLinearGradient(x, y, x, y + h);
+      gradient.addColorStop(0, '#E0F7FF');  // Light blue-white at top
+      gradient.addColorStop(0.5, '#B3E5FC'); // Medium blue
+      gradient.addColorStop(1, '#81D4FA');   // Darker blue at tip
+
+      ctx.fillStyle = gradient;
+
+      // Draw icicle as triangle pointing down (pixelated style)
+      ctx.beginPath();
+      ctx.moveTo(x, y);                    // Top left
+      ctx.lineTo(x + w, y);                 // Top right
+      ctx.lineTo(x + w / 2, y + h);         // Bottom point (sharp tip)
+      ctx.closePath();
+      ctx.fill();
+
+      // Add white highlight on left side for 3D effect
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + w * 0.3, y);
+      ctx.lineTo(x + w / 2 * 0.6, y + h);
+      ctx.closePath();
+      ctx.fill();
+
+      // Add darker edge on right for depth
+      ctx.fillStyle = 'rgba(0, 100, 150, 0.3)';
+      ctx.beginPath();
+      ctx.moveTo(x + w, y);
+      ctx.lineTo(x + w * 0.7, y);
+      ctx.lineTo(x + w / 2 + w * 0.1, y + h);
+      ctx.lineTo(x + w / 2, y + h);
+      ctx.closePath();
+      ctx.fill();
+
+      // Sharp white tip at bottom
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(x + w / 2, y + h - 2, 2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  // Draw polar bears as pixelated enemies
+  drawPolarBears(polarBears) {
+    polarBears.forEach((bear) => {
+      const ctx = this.ctx;
+      const x = bear.x;
+      const y = bear.y;
+      const w = bear.w;
+      const h = bear.h;
+
+      // Determine facing direction
+      const facingRight = bear.direction > 0;
+
+      ctx.save();
+
+      // Flip horizontally if moving left
+      if (!facingRight) {
+        ctx.translate(x + w, y);
+        ctx.scale(-1, 1);
+        ctx.translate(-x, -y);
+      }
+
+      // Body (white/cream color)
+      ctx.fillStyle = '#F5F5DC';  // Beige-white
+      ctx.fillRect(x + 5, y + 10, w - 10, h - 10);
+
+      // Head (rounded)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(x + w - 10, y + 12, 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Ears
+      ctx.fillStyle = '#F5F5DC';
+      ctx.fillRect(x + w - 15, y + 5, 4, 5);
+      ctx.fillRect(x + w - 8, y + 5, 4, 5);
+
+      // Snout
+      ctx.fillStyle = '#FFE4E1';
+      ctx.fillRect(x + w - 12, y + 14, 6, 4);
+
+      // Nose (black)
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(x + w - 11, y + 14, 2, 2);
+
+      // Eyes (black dots)
+      ctx.fillRect(x + w - 14, y + 10, 2, 2);
+      ctx.fillRect(x + w - 8, y + 10, 2, 2);
+
+      // Legs (4 legs)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(x + 8, y + h - 8, 6, 8);   // Front left
+      ctx.fillRect(x + 18, y + h - 8, 6, 8);  // Front right
+      ctx.fillRect(x + w - 18, y + h - 8, 6, 8);  // Back left
+      ctx.fillRect(x + w - 8, y + h - 8, 6, 8);   // Back right
+
+      // Paws (black pads)
+      ctx.fillStyle = '#333333';
+      ctx.fillRect(x + 9, y + h - 2, 4, 2);
+      ctx.fillRect(x + 19, y + h - 2, 4, 2);
+      ctx.fillRect(x + w - 17, y + h - 2, 4, 2);
+      ctx.fillRect(x + w - 7, y + h - 2, 4, 2);
 
       ctx.restore();
     });

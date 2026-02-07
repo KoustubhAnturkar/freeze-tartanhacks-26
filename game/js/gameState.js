@@ -22,6 +22,13 @@ class GameState {
     this.transitioning = false;
     // clone collectibles so we can mutate per-play
     this.currentCollectibles = (this.currentLevelData.collectibles || []).map(c => ({...c}));
+    // Load icicles if present
+    this.currentIcicles = this.currentLevelData.icicles || [];
+    // Load polar bears if present (with direction tracking)
+    this.currentPolarBears = (this.currentLevelData.polarBears || []).map(bear => ({
+      ...bear,
+      direction: 1  // 1 = moving right, -1 = moving left
+    }));
     // Update UI
     document.getElementById('lvl').textContent = levelNumber;
   }
@@ -103,6 +110,57 @@ class GameState {
 
   getWalls() {
     return this.walls;
+  }
+
+  getIcicles() {
+    return this.currentIcicles;
+  }
+
+  getPolarBears() {
+    return this.currentPolarBears;
+  }
+
+  // Update polar bear positions (oscillate horizontally)
+  updatePolarBears() {
+    for (let bear of this.currentPolarBears) {
+      // Move bear in current direction
+      bear.x += bear.speed * bear.direction;
+
+      // Check if bear hit boundary, reverse direction
+      if (bear.x <= bear.minX) {
+        bear.x = bear.minX;
+        bear.direction = 1;  // Start moving right
+      } else if (bear.x >= bear.maxX) {
+        bear.x = bear.maxX;
+        bear.direction = -1; // Start moving left
+      }
+    }
+  }
+
+  // Check if player hit a polar bear
+  checkPolarBearCollision(player) {
+    for (let bear of this.currentPolarBears) {
+      if (player.x < bear.x + bear.w &&
+          player.x + player.w > bear.x &&
+          player.y < bear.y + bear.h &&
+          player.y + player.h > bear.y) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Check if player hit an icicle
+  checkIcicleCollision(player) {
+    for (let icicle of this.currentIcicles) {
+      if (player.x < icicle.x + icicle.w &&
+          player.x + player.w > icicle.x &&
+          player.y < icicle.y + icicle.h &&
+          player.y + player.h > icicle.y) {
+        return true;
+      }
+    }
+    return false;
   }
 
   isWon() {

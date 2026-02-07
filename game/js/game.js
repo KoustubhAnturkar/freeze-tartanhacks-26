@@ -99,6 +99,9 @@ class Game {
       return;
     }
 
+    // Update polar bear positions (oscillate)
+    this.gameState.updatePolarBears();
+
     // Update player with current input and platforms
     const keys = this.input.getKeys();
     this.player.update(
@@ -113,13 +116,29 @@ class Game {
 
     // Let input poll run to handle step sounds
     if (this.input && typeof this.input.poll === 'function') this.input.poll();
-
+    // Check if player fell off screen
     if (this.player.y > this.height) {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall');
       }
       // RESET COLLECTIBLES: Reload the level to respawn items
       this.gameState.loadLevel(this.gameState.getCurrentLevel());
+      this.player.reset(50, 20);
+    }
+
+    // Check icicle collision - reset level if hit
+    if (this.gameState.checkIcicleCollision(this.player)) {
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('fall'); // Use fall sound for icicle hit
+      }
+      this.player.reset(50, 20);
+    }
+
+    // Check polar bear collision - reset level if hit
+    if (this.gameState.checkPolarBearCollision(this.player)) {
+      if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
+        SOUNDS.play('fall'); // Use fall sound for polar bear hit
+      }
       this.player.reset(50, 20);
     }
 
@@ -154,6 +173,12 @@ class Game {
 
     // Draw level elements (Platforms in foreground)
     this.renderer.drawPlatforms(this.gameState.getPlatforms(), CONFIG.COLORS);
+
+    // Draw icicles (dangerous obstacles)
+    this.renderer.drawIcicles(this.gameState.getIcicles());
+
+    // Draw polar bears (moving enemies)
+    this.renderer.drawPolarBears(this.gameState.getPolarBears());
 
     // Draw player
     this.player.draw(this.ctx, CONFIG.COLORS);
