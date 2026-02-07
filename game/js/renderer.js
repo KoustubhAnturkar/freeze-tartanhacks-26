@@ -144,46 +144,111 @@ class Renderer {
   }
 
   // Draw collectibles (canvas-only scooty-dog icon)
+  // drawCollectibles(collectibles) {
+  //   collectibles.forEach((c) => {
+  //     const cx = c.x;
+  //     const cy = c.y;
+  //     const w = c.w;
+  //     const h = c.h;
+
+  //     // Wheels
+  //     const wheelR = Math.max(2, Math.min(w, h) * 0.18);
+  //     this.ctx.fillStyle = '#F59E0B';
+  //     this.ctx.beginPath();
+  //     this.ctx.arc(cx + wheelR + 1, cy + h - wheelR, wheelR, 0, Math.PI * 2);
+  //     this.ctx.arc(cx + w - wheelR - 1, cy + h - wheelR, wheelR, 0, Math.PI * 2);
+  //     this.ctx.fill();
+
+  //     // Body
+  //     this.ctx.fillStyle = '#000';
+  //     const bodyH = Math.max(4, h * 0.45);
+  //     this.ctx.fillRect(cx + 2, cy + h - wheelR - bodyH - 2, w - 4, bodyH);
+
+  //     // Head (front)
+  //     const headR = Math.max(2, Math.min(w, h) * 0.18);
+  //     this.ctx.beginPath();
+  //     this.ctx.arc(cx + w - headR - 3, cy + h - wheelR - bodyH + headR - 3, headR, 0, Math.PI * 2);
+  //     this.ctx.fill();
+
+  //     // Eyes
+  //     this.ctx.fillStyle = '#fff';
+  //     this.ctx.beginPath();
+  //     this.ctx.arc(cx + w - headR - 5, cy + h - wheelR - bodyH + headR - 4, 1.2, 0, Math.PI * 2);
+  //     this.ctx.arc(cx + w - headR + 1, cy + h - wheelR - bodyH + headR - 4, 1.2, 0, Math.PI * 2);
+  //     this.ctx.fill();
+
+  //     // Small ear/antenna to hint 'scooty'
+  //     this.ctx.strokeStyle = '#4B5563';
+  //     this.ctx.lineWidth = 1;
+  //     this.ctx.beginPath();
+  //     this.ctx.moveTo(cx + w - headR - 2, cy + h - wheelR - bodyH - 2);
+  //     this.ctx.lineTo(cx + w - headR + 6, cy + h - wheelR - bodyH - 8);
+  //     this.ctx.stroke();
+  //   });
+  // }
+  // Draw collectibles (The Scotty Dog)
+  // Draw collectibles (The Scotty Dog)
+  // Draw collectibles (Pixel Scotty Dog - Fixed Collar)
+  // Draw collectibles (Best of both worlds: V1 Body + V2 Collar)
   drawCollectibles(collectibles) {
     collectibles.forEach((c) => {
-      const cx = c.x;
-      const cy = c.y;
-      const w = c.w;
-      const h = c.h;
+      const ctx = this.ctx;
+      const x = c.x;
+      const y = c.y;
+      // Scale factor (using the V1 scale which was slightly smaller/crisper)
+      const s = c.w / 30;
 
-      // Wheels
-      const wheelR = Math.max(2, Math.min(w, h) * 0.18);
-      this.ctx.fillStyle = '#F59E0B';
-      this.ctx.beginPath();
-      this.ctx.arc(cx + wheelR + 1, cy + h - wheelR, wheelR, 0, Math.PI * 2);
-      this.ctx.arc(cx + w - wheelR - 1, cy + h - wheelR, wheelR, 0, Math.PI * 2);
-      this.ctx.fill();
+      ctx.save();
+      // Bobbing animation
+      const bob = Math.sin(Date.now() / 200) * 3;
+      ctx.translate(x + c.w / 2, y + c.h / 2 + bob);
+      ctx.scale(s, s);
 
-      // Body
-      this.ctx.fillStyle = '#000';
-      const bodyH = Math.max(4, h * 0.45);
-      this.ctx.fillRect(cx + 2, cy + h - wheelR - bodyH - 2, w - 4, bodyH);
+      // --- 1. THE BODY (From First Version) ---
+      ctx.fillStyle = "#000";
+      ctx.beginPath();
 
-      // Head (front)
-      const headR = Math.max(2, Math.min(w, h) * 0.18);
-      this.ctx.beginPath();
-      this.ctx.arc(cx + w - headR - 3, cy + h - wheelR - bodyH + headR - 3, headR, 0, Math.PI * 2);
-      this.ctx.fill();
+      // Main body block
+      ctx.rect(-12, -5, 20, 14);
 
-      // Eyes
-      this.ctx.fillStyle = '#fff';
-      this.ctx.beginPath();
-      this.ctx.arc(cx + w - headR - 5, cy + h - wheelR - bodyH + headR - 4, 1.2, 0, Math.PI * 2);
-      this.ctx.arc(cx + w - headR + 1, cy + h - wheelR - bodyH + headR - 4, 1.2, 0, Math.PI * 2);
-      this.ctx.fill();
+      // Back leg
+      ctx.rect(-12, 9, 6, 6);
 
-      // Small ear/antenna to hint 'scooty'
-      this.ctx.strokeStyle = '#4B5563';
-      this.ctx.lineWidth = 1;
-      this.ctx.beginPath();
-      this.ctx.moveTo(cx + w - headR - 2, cy + h - wheelR - bodyH - 2);
-      this.ctx.lineTo(cx + w - headR + 6, cy + h - wheelR - bodyH - 8);
-      this.ctx.stroke();
+      // Front leg
+      ctx.rect(2, 9, 6, 6);
+
+      // Tail (Pointy)
+      ctx.moveTo(-12, -5);
+      ctx.lineTo(-14, -12);
+      ctx.lineTo(-8, -5);
+      ctx.fill();
+
+      // --- 2. THE HEAD (From First Version) ---
+      ctx.beginPath();
+
+      // Neck/Head area
+      ctx.rect(0, -15, 14, 12);
+
+      // Snout/Beard
+      ctx.moveTo(14, -10);
+      ctx.lineTo(18, -10); // Nose tip
+      ctx.lineTo(14, 0);   // Chin
+
+      // Ears (Pointy)
+      ctx.moveTo(2, -15);
+      ctx.lineTo(4, -22);  // Ear tip
+      ctx.lineTo(8, -15);
+      ctx.fill();
+
+      // --- 3. THE COLLAR (From Second Version - Fixed Placement) ---
+      // Placing it exactly where the head meets the body
+      ctx.fillStyle = "#DC2626"; // Bright Red
+
+      // A simple band around the neck area
+      // x=0 (start of head), y=-3 (bottom of head block), w=14 (width of head)
+      ctx.fillRect(-3, -4, 14, 4);
+
+      ctx.restore();
     });
   }
 }

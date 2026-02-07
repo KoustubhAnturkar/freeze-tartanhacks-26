@@ -40,7 +40,7 @@ const CONFIG = {
     PLATFORM_TOP: "#f1f5f9",
     GOAL: "#828282ff",
     GOAL_OUTLINE: "#1e90ff",
-    GOAL_FLAG: "#1e90ff",
+    GOAL_FLAG: "#C41E3A",
     PENGUIN_BODY: "#000",
     PENGUIN_BELLY: "#fff",
     PENGUIN_EYES: "#fff",
