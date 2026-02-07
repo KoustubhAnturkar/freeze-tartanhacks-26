@@ -60,6 +60,7 @@ class Game {
     const keys = this.input.getKeys();
     this.player.update(
       keys,
+      this.gameState.getWalls(),
       this.gameState.getPlatforms(),
       CONFIG.GRAVITY,
       CONFIG.MOVE_SPEED,

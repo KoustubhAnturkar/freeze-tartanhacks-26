@@ -1,7 +1,8 @@
 // GameState - manages level progression, win conditions, and game state
 class GameState {
   constructor(levels, transitionDelay) {
-    this.levels = levels;
+    this.walls = levels.walls;
+    this.levels = levels.platformsAndGoals;
     this.transitionDelay = transitionDelay;
     this.currentLevel = 1;
     this.won = false;
@@ -73,6 +74,10 @@ class GameState {
 
   getGoal() {
     return this.currentLevelData.goal;
+  }
+
+  getWalls() {
+    return this.walls;
   }
 
   isWon() {
