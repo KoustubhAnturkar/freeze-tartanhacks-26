@@ -12,7 +12,7 @@ const LEVELS = {
           y: 400,
           w: 150,
           h: 20,
-          hasIcicles: true,
+          hasIcicles: false,
           hasCollectible: true,
         },
         {
@@ -20,10 +20,10 @@ const LEVELS = {
           y: 320,
           w: 120,
           h: 20,
-          hasIcicles: true,
+          hasIcicles: false,
           hasCollectible: true,
         },
-        { x: 620, y: 200, w: 180, h: 50, hasIcicles: true },
+        { x: 620, y: 200, w: 180, h: 50, hasIcicles: false },
       ],
       goal: { x: 680, y: 130, w: 35, h: 35 },
     },
@@ -32,14 +32,14 @@ const LEVELS = {
     {
       platforms: [
         { x: 0, y: 200, w: 200, h: 50 },
-        { x: 200, y: 580, w: 450, h: 20, hasIcicles: true },
-        { x: 395, y: 0, w: 10, h: 500, hasIcicles: true },
+        { x: 200, y: 580, w: 450, h: 20, hasIcicles: false },
+        { x: 395, y: 0, w: 10, h: 500, hasIcicles: false },
         {
           x: 405,
           y: 480,
           w: 100,
           h: 20,
-          hasIcicles: true,
+          hasIcicles: false,
           hasCollectible: true,
         },
         {
@@ -47,7 +47,7 @@ const LEVELS = {
           y: 380,
           w: 100,
           h: 20,
-          hasIcicles: true,
+          hasIcicles: false,
           hasCollectible: true,
         },
         {
@@ -55,7 +55,7 @@ const LEVELS = {
           y: 280,
           w: 100,
           h: 20,
-          hasIcicles: true,
+          hasIcicles: false,
           hasCollectible: true,
         },
         {
@@ -63,7 +63,7 @@ const LEVELS = {
           y: 250,
           w: 10,
           h: 350,
-          hasIcicles: true,
+          hasIcicles: false,
         },
         { x: 650, y: 200, w: 150, h: 50 },
       ],
@@ -79,20 +79,20 @@ const LEVELS = {
           y: 350,
           w: 120,
           h: 20,
-          hasIcicles: true,
+          hasIcicles: false,
           hasCollectible: true,
         },
-        { x: 370, y: 280, w: 100, h: 20, hasIcicles: true },
+        { x: 370, y: 280, w: 100, h: 20, hasIcicles: false },
         {
           x: 450,
           y: 400,
           w: 150,
           h: 20,
-          hasIcicles: true,
+          hasIcicles: false,
           hasCollectible: true,
         },
-        { x: 370, y: 480, w: 100, h: 20, hasIcicles: true },
-        { x: 650, y: 300, w: 150, h: 50, hasIcicles: true },
+        { x: 370, y: 480, w: 100, h: 20, hasIcicles: false },
+        { x: 650, y: 300, w: 150, h: 50, hasIcicles: false },
       ],
       goal: { x: 690, y: 230, w: 35, h: 35 },
       icicles: [
@@ -111,21 +111,37 @@ const LEVELS = {
       ],
     },
 
+    // Level 4 - Polar Bear Patrols (MEDIUM - Moving Enemies Focus)
     {
       platforms: [
         { x: 0, y: 150, w: 200, h: 20, hasIcicles: false },
-        { x: 250, y: 300, w: 400, h: 20, hasIcicles: false },
-        { x: 50, y: 500, w: 200, h: 20, hasIcicles: false },
-        { x: 350, y: 500, w: 300, h: 20, hasIcicles: false },
+        {
+          x: 250,
+          y: 300,
+          w: 400,
+          h: 20,
+          hasIcicles: false,
+          hasCollectible: true,
+        },
+        {
+          x: 50,
+          y: 400,
+          w: 200,
+          h: 20,
+          hasIcicles: false,
+          hasCollectible: true,
+        },
+        {
+          x: 350,
+          y: 500,
+          w: 300,
+          h: 20,
+          hasIcicles: false,
+          hasCollectible: true,
+        },
         { x: 700, y: 400, w: 100, h: 20, hasIcicles: false },
       ],
       goal: { x: 740, y: 330, w: 35, h: 35 },
-
-      collectibles: [
-        { x: 450, y: 250, w: 20, h: 20 },
-        { x: 500, y: 450, w: 20, h: 20 },
-        { x: 100, y: 450, w: 20, h: 20 },
-      ],
       polarBears: [
         // Bear 1: Patrols the top bridge (platform y = 300)
         {
@@ -150,7 +166,7 @@ const LEVELS = {
           speed: 2.2,
           dir: -1,
         },
-        { x: 200, y: 465, w: 40, h: 35, minX: 50, maxX: 220, speed: 1.1 }, // On fourth platform
+        { x: 200, y: 365, w: 40, h: 35, minX: 50, maxX: 220, speed: 1.1 }, // On fourth platform
         // { x: 200, y: 560, w: 40, h: 35, minX: 200, maxX: 280, speed: 1 } // On 3RD platform
       ],
     },
@@ -159,12 +175,33 @@ const LEVELS = {
       platforms: [
         { x: 0, y: 250, w: 140, h: 50 }, // Starting platform - wider
         { x: 170, y: 470, w: 100, h: 20, hasIcicles: true }, // First jump
-        { x: 310, y: 400, w: 70, h: 20, hasIcicles: true }, // Second platform
+        {
+          x: 310,
+          y: 400,
+          w: 70,
+          h: 20,
+          hasIcicles: true,
+          hasCollectible: true,
+        }, // Second platform
         { x: 170, y: 330, w: 100, h: 20, hasIcicles: true }, // Zigzag back
         { x: 310, y: 230, w: 90, h: 20, hasIcicles: true }, // Zigzag forward
         { x: 440, y: 350, w: 110, h: 20, hasIcicles: true }, // Mid section
-        { x: 600, y: 280, w: 100, h: 20, hasIcicles: true }, // Upper right
-        { x: 440, y: 210, w: 100, h: 20, hasIcicles: true }, // Back left high
+        {
+          x: 600,
+          y: 280,
+          w: 100,
+          h: 20,
+          hasIcicles: true,
+          hasCollectible: true,
+        }, // Upper right
+        {
+          x: 440,
+          y: 210,
+          w: 100,
+          h: 20,
+          hasIcicles: true,
+          hasCollectible: true,
+        }, // Back left high
         { x: 700, y: 250, w: 100, h: 50 }, // Final safe platform
       ],
       goal: { x: 730, y: 180, w: 35, h: 35 },
