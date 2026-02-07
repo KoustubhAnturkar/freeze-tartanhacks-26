@@ -21,9 +21,21 @@ class GameState {
     this.won = false;
     this.transitioning = false;
     // clone collectibles so we can mutate per-play
-    this.currentCollectibles = (this.currentLevelData.collectibles || []).map(
-      (c) => ({ ...c }),
-    );
+    this.currentLevelData.platforms.forEach((platform) => {
+      if (platform.hasCollectible) {
+        const x = platform.x + platform.w / 2;
+        const y = platform.y - 20;
+
+        this.currentCollectibles.push({
+          x: x,
+          y: y,
+          w: 20, // Collectible width
+          h: 20, // Collectible height
+          collected: false,
+        });
+      }
+    });
+
     // Load icicles if present
     this.currentIcicles = this.currentLevelData.icicles || [];
     // Load polar bears if present (with direction tracking)
