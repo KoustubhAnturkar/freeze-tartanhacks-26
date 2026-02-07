@@ -28,6 +28,40 @@ canvas {
   outline: none;
 }
 
+/* Go Online Button - Top Right Corner */
+#goOnlineBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  font-family: Arial, sans-serif;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+#goOnlineBtn:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+#goOnlineBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 /* Control Styles Reverted to Transparent Overlay */
 #controls {
   position: absolute;
