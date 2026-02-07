@@ -151,6 +151,12 @@ class Game {
       }
       // RESET COLLECTIBLES: Reload the level to respawn items
       this.gameState.loadLevel(this.gameState.getCurrentLevel());
+
+      // Reset the score when player falls
+      this.score = 0;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
+
       this.player.reset(50, 20);
     }
 
@@ -159,6 +165,12 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall'); // Use fall sound for icicle hit
       }
+      // RESET COLLECTIBLES: Reload the level to respawn items
+      this.gameState.loadLevel(this.gameState.getCurrentLevel());
+      // Reset the score when player hits an icicle
+      this.score = 0;
+      const scoreEl = document.getElementById('score');
+      if (scoreEl) scoreEl.textContent = String(this.score);
       this.player.reset(50, 20);
     }
 
@@ -167,6 +179,13 @@ class Game {
       if (typeof SOUNDS !== 'undefined' && SOUNDS && typeof SOUNDS.play === 'function') {
         SOUNDS.play('fall'); // Use fall sound for polar bear hit
       }
+      // RESET COLLECTIBLES: Reload the level to respawn items
+        this.gameState.loadLevel(this.gameState.getCurrentLevel());
+        // Reset the score when player hits a polar bear
+        this.score = 0;
+        const scoreEl = document.getElementById('score');
+        if (scoreEl) scoreEl.textContent = String(this.score);
+
       this.player.reset(50, 20);
     }
 
@@ -188,6 +207,10 @@ class Game {
         SOUNDS.play('levelComplete');
       }
       this.gameState.markLevelComplete(() => {
+        // Reset the score
+        this.score = 0;
+        const scoreEl = document.getElementById('score');
+        if (scoreEl) scoreEl.textContent = String(this.score);
         this.player.reset(50, 20);
       });
     }

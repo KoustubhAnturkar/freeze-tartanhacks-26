@@ -257,8 +257,9 @@ class Renderer {
     ctx.fillRect(-3, -4, 14, 4);
 
     ctx.restore();
+  }
   // Draw icicles as hanging spikes
-  drawIcicles(icicles) {
+  drawIcicles(icicles){
     icicles.forEach((icicle) => {
       const ctx = this.ctx;
       const x = icicle.x;
