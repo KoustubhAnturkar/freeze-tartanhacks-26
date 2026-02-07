@@ -13,8 +13,6 @@ class Game {
     this.gameState = new GameState(LEVELS, CONFIG.LEVEL_TRANSITION_DELAY);
     this.player = new Player(50, this.height - 100, CONFIG.PLAYER_WIDTH, CONFIG.PLAYER_HEIGHT);
 
-    // No images allowed — collectibles are rendered via canvas drawing
-
     // Initialize sounds and ensure BGM starts/resumes on user gesture
     if (typeof SOUNDS !== 'undefined' && SOUNDS) {
       SOUNDS.init();
