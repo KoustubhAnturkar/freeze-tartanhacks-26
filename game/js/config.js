@@ -20,48 +20,36 @@ const CONFIG = {
   // Colors (Deep Freeze Theme)
   COLORS: {
     // The Sky Gradient (Top -> Bottom)
-    bgTop: '#bfdbfe',    // Light Blue
-    bgBottom: '#f8fafc', // White/Fog at the horizon
-
-    // Platforms: Dark Slate (High contrast against the sky)
-    platform: '#334155',
-    platformTop: '#f1f5f9', // A "Snow cap" on top of the platform
-
-    // The Player (unchanged, keeps focus)
-    playerBody: '#111827',
-    playerBelly: '#ffffff',
-    playerEyes: '#ffffff',
-    playerPupils: '#1e90ff',
-    playerBeak: '#F59E0B',
-    playerFeet: '#F59E0B',
+    bgTop: "#bfdbfe", // Light Blue
+    bgBottom: "#f8fafc", // White/Fog at the horizon
 
     // The Goal Mountain
-    goal: '#64748b',
-    goalPeak: '#ffffff',
-    goalFlag: '#EF4444',
+    goal: "#64748b",
+    goalPeak: "#ffffff",
+    goalFlag: "#EF4444",
 
     // Distant Background Mountains (Subtle)
-    distantMountain: '#cbd5e1',
+    distantMountain: "#cbd5e1",
 
     // UI
-    winOverlay: 'rgba(17, 24, 39, 0.8)',
-    winText: '#ffffff',
-    BACKGROUND: '#fff',
-    PLATFORM: '#000',
-    PLATFORM_OUTLINE: '#1e90ff',
-    GOAL: '#fff',
-    GOAL_OUTLINE: '#1e90ff',
-    GOAL_FLAG: '#1e90ff',
-    PENGUIN_BODY: '#000',
-    PENGUIN_BELLY: '#fff',
-    PENGUIN_EYES: '#fff',
-    PENGUIN_PUPILS: '#1e90ff',
-    PENGUIN_BEAK: '#1e90ff',
-    PENGUIN_FEET: '#1e90ff',
-    WIN_OVERLAY: 'rgba(0, 0, 0, 0.8)',
-    WIN_TEXT: '#1e90ff'
+    winOverlay: "rgba(17, 24, 39, 0.8)",
+    winText: "#ffffff",
+    BACKGROUND: "#fff",
+    PLATFORM: "#334155",
+    PLATFORM_TOP: "#f1f5f9",
+    GOAL: "#fff",
+    GOAL_OUTLINE: "#1e90ff",
+    GOAL_FLAG: "#1e90ff",
+    PENGUIN_BODY: "#000",
+    PENGUIN_BELLY: "#fff",
+    PENGUIN_EYES: "#fff",
+    PENGUIN_PUPILS: "#000",
+    PENGUIN_BEAK: "#F59E0B",
+    PENGUIN_FEET: "#F59E0B",
+    WIN_OVERLAY: "rgba(0, 0, 0, 0.8)",
+    WIN_TEXT: "#1e90ff",
   },
   // Sound settings
   SOUND_ENABLED: true,
-  SOUND_VOLUME: 0.6
+  SOUND_VOLUME: 0.6,
 };
