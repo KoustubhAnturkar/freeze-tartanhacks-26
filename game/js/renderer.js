@@ -142,4 +142,48 @@ class Renderer {
     // Reset text alignment
     this.ctx.textAlign = "left";
   }
+
+  // Draw collectibles (canvas-only scooty-dog icon)
+  drawCollectibles(collectibles) {
+    collectibles.forEach((c) => {
+      const cx = c.x;
+      const cy = c.y;
+      const w = c.w;
+      const h = c.h;
+
+      // Wheels
+      const wheelR = Math.max(2, Math.min(w, h) * 0.18);
+      this.ctx.fillStyle = '#F59E0B';
+      this.ctx.beginPath();
+      this.ctx.arc(cx + wheelR + 1, cy + h - wheelR, wheelR, 0, Math.PI * 2);
+      this.ctx.arc(cx + w - wheelR - 1, cy + h - wheelR, wheelR, 0, Math.PI * 2);
+      this.ctx.fill();
+
+      // Body
+      this.ctx.fillStyle = '#000';
+      const bodyH = Math.max(4, h * 0.45);
+      this.ctx.fillRect(cx + 2, cy + h - wheelR - bodyH - 2, w - 4, bodyH);
+
+      // Head (front)
+      const headR = Math.max(2, Math.min(w, h) * 0.18);
+      this.ctx.beginPath();
+      this.ctx.arc(cx + w - headR - 3, cy + h - wheelR - bodyH + headR - 3, headR, 0, Math.PI * 2);
+      this.ctx.fill();
+
+      // Eyes
+      this.ctx.fillStyle = '#fff';
+      this.ctx.beginPath();
+      this.ctx.arc(cx + w - headR - 5, cy + h - wheelR - bodyH + headR - 4, 1.2, 0, Math.PI * 2);
+      this.ctx.arc(cx + w - headR + 1, cy + h - wheelR - bodyH + headR - 4, 1.2, 0, Math.PI * 2);
+      this.ctx.fill();
+
+      // Small ear/antenna to hint 'scooty'
+      this.ctx.strokeStyle = '#4B5563';
+      this.ctx.lineWidth = 1;
+      this.ctx.beginPath();
+      this.ctx.moveTo(cx + w - headR - 2, cy + h - wheelR - bodyH - 2);
+      this.ctx.lineTo(cx + w - headR + 6, cy + h - wheelR - bodyH - 8);
+      this.ctx.stroke();
+    });
+  }
 }
